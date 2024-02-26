@@ -1,0 +1,45 @@
+---
+title: "Abby Hahs"
+about:
+  id: intro-heading
+  template: trestles
+  image: profilepic.jpg
+  image-shape: round
+  links:
+    - icon: envelope
+      href: mailto:hahs1@stolaf.edu
+    - icon: github
+      href: https://github.com/abbyhahs
+---
+:::{#intro-heading}
+
+## Abby Hahs
+
+Student @ [St. Olaf College](https://wp.stolaf.edu/)
+
+### Education
+
+BA in Math with Statistics and Data Science concentration<br>
+2026 | St. Olaf College
+
+Lakeville North High School<br>
+2022 | Lakeville, MN
+
+### Work Experience
+
+Linear Algebra TA | St. Olaf College
+
+Soccer Referee | Lakeville Soccer Club
+
+### Co-Curricular Experience
+
+St. Olaf Alpine Ski Team
+:::
+
+### Get in Touch
+
+**Email**: <a href='mailto:hahs1@stolaf.edu'>hahs at stolaf.edu</a>
+
+**Address**: 1500 St. Olaf Ave, Northfield, MN 55057
+
+**Phone**: 612-345-2682
