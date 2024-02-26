@@ -187,7 +187,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>Linking to GEOS 3.11.2, GDAL 3.7.2, PROJ 9.3.0; sf_use_s2() is TRUE</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggspatial)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"baumer-lab/fec16"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"baumer-lab/fec16"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Skipping install of 'fec16' from a github remote, the SHA1 (8d44b32a) has not changed since last install.
   Use `force = TRUE` to force installation</code></pre>
@@ -300,7 +301,7 @@ Available layers:
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">DISTRICT =</span> <span class="fu">parse_number</span>(<span class="fu">as.character</span>(DISTRICT)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Reading layer `districts113' from data source 
-  `C:\Users\abbyh\AppData\Local\Temp\RtmpaazhtN\districts113\districtShapes' 
+  `C:\Users\abbyh\AppData\Local\Temp\Rtmpmww6rS\districts113\districtShapes' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON

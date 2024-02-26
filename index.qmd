@@ -3,8 +3,8 @@ title: "Abby Hahs"
 about:
   id: intro-heading
   template: trestles
-  image: profilepic.jpg
-  image-shape: round
+  image: profilepic2.jpg
+  image-shape: rectangle
   links:
     - icon: envelope
       href: mailto:hahs1@stolaf.edu
@@ -38,7 +38,7 @@ St. Olaf Alpine Ski Team
 
 ### Get in Touch
 
-**Email**: <a href='mailto:hahs1@stolaf.edu'>hahs at stolaf.edu</a>
+**Email**: <a href='mailto:hahs1@stolaf.edu'>hahs1@stolaf.edu</a>
 
 **Address**: 1500 St. Olaf Ave, Northfield, MN 55057
 

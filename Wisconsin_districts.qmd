@@ -11,6 +11,7 @@ editor_options:
 library(tidyverse)
 library(sf)
 library(ggspatial)
+library(ggplot2)
 devtools::install_github("baumer-lab/fec16")
 library(fec16)
 ```

@@ -1,14 +1,34 @@
 project:
   type: website
+  output-dir: docs
+
 
 website:
-  title: "temp_webpage"
+  title: "Abby Hahs"
   navbar:
+    background: primary
+    search: true
     left:
-      - href: index.qmd
-        text: Home
-      - about.qmd
+      - file: index.qmd
+        text: "Home"
+      - sidebar:Maps
 
+  sidebar:
+    - id: Maps
+      title: "Maps"
+      contents:
+        - US_states.qmd
+        - Wisconsin_districts.qmd
+        
+        
+  page-footer:
+    left: |
+      &copy; Abby Hahs, 2024<br>
+      All content licensed under <i class='bi-badge-cc'></i>
+      [(CC BY-NC-SA 4.0)](http://creativecommons.org/licenses/by-nc-sa/4.0/)
+    right: |
+      Site built with <a href='https://quarto.org/'>Quarto</a>
+      
 format:
   html:
     theme: cosmo
