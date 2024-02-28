@@ -40,7 +40,7 @@ flu_vaccine |>
   coord_map() +
   theme_classic() +
   scale_fill_viridis() +
-  labs(fill = "Percentage", title = "Percentage of Healthcare Workers with the Influenza Vaccine in 2020-21")
+  labs(fill = "Percentage", title = "Percentage of Healthcare Workers with the Influenza Vaccine in 2020-21", caption = "healthdata.gov")
   
 ```
 
