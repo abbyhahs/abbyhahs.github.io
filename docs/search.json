@@ -4,7 +4,7 @@
     "href": "Wisconsin_districts.html",
     "title": "Wisconsin Districts",
     "section": "",
-    "text": "By looking at this plot of Wisconsin’s Congressional Districts and the proportion of Republican votes in each district, we can conclude that there is evidence of gerrymandering. Districts 2 and 3 have a clear Democratic majority, but none of the “Republican” districts have above a 75% majority. Due to the low proportion of Republican votes, it seems that the congressional districts have been engineered so that Republican’s just barely have the majority in all districts except for 2 and 3."
+    "text": "By looking at this plot of Wisconsin’s Congressional Districts and the proportion of Republican votes in each district, we can conclude that there is evidence of gerrymandering. Districts 2, 3, and 4 have a clear Democratic majority, but none of the districts that Republican’s won have above a 75% Republican majority. Due to the low proportion of Republican votes, it seems that the congressional districts have been engineered so that Republican’s just barely have the majority in all districts except for 2, 3, and 4."
   },
   {
     "objectID": "index.html",
@@ -25,6 +25,6 @@
     "href": "US_states.html",
     "title": "US States",
     "section": "",
-    "text": "This plot depicts the estimated percentage of all kinds of healthcare workers who received the Influenza vaccine in 2020-21. The percentage was estimated based on a sample size taken throughout the state. We learn that Oregon, Nevada, and Florida have the lowest influenza vaccination rate at about 70-75%. States such as Colorado, South Dakota, and Massachusetts have above a 95% vaccination rate. There doesn’t appear to be any clear geographical trends in Influenza vaccinations."
+    "text": "This plot depicts the estimated percentage of all kinds of healthcare workers who received the Influenza vaccine in 2020-21. The percentage was estimated based on a sample taken throughout the state. We learn that Oregon, Nevada, and Florida have the lowest influenza vaccination rate at about 70-75%. The states with the highest vaccination rates are Colorado, South Dakota, and Massachusetts with above a 95% vaccination rate. There doesn’t appear to be any clear geographical trends in Influenza vaccinations."
   }
 ]
