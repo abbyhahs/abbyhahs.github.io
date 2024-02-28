@@ -44,4 +44,4 @@ flu_vaccine |>
   
 ```
 
-This plot depicts the estimated percentage of all kinds of healthcare workers who received the Influenza vaccine in 2020-21. The percentage was estimated based on a sample taken throughout the state. We learn that Oregon, Nevada, and Florida have the lowest influenza vaccination rate at about 70-75%. The states with the highest vaccination rates are Colorado, South Dakota, and Massachusetts with above a 95% vaccination rate. There doesn't appear to be any clear geographical trends in Influenza vaccinations.
+This plot depicts the estimated percentage of all kinds of healthcare workers who received the Influenza vaccine in 2020-21. The percentage was estimated based on a sample taken throughout each state. We learn that Oregon, Nevada, and Florida have the lowest influenza vaccination rate at about 70-75%. The states with the highest vaccination rates are Colorado, South Dakota, and Massachusetts with above a 95% vaccination rate. There doesn't appear to be any clear geographical trends in Influenza vaccinations.
