@@ -1,0 +1,8 @@
+---
+title: "Simulation"
+sidebar: false
+format:
+  html: default
+editor_options: 
+  chunk_output_type: console
+---

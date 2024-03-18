@@ -1,5 +1,6 @@
 ---
 title: "Abby Hahs"
+sidebar: false
 about:
   id: intro-heading
   template: trestles

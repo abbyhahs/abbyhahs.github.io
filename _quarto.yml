@@ -12,6 +12,9 @@ website:
       - file: index.qmd
         text: "Home"
       - sidebar:Maps
+      - file: simulation.qmd
+        text: "Simulation"
+      
 
   sidebar:
     - id: Maps
@@ -19,7 +22,7 @@ website:
       contents:
         - US_states.qmd
         - Wisconsin_districts.qmd
-        
+
         
   page-footer:
     left: |
@@ -35,5 +38,5 @@ format:
     css: styles.css
     toc: true
 
-editor: visual
+editor: source
 
