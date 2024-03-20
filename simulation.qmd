@@ -6,3 +6,121 @@ format:
 editor_options: 
   chunk_output_type: console
 ---
+
+```{r}
+#| include: false
+
+library(tidyverse)
+```
+
+In this study, participants were asked to imagine they moved to a new state and were filling out the form for a new drivers license. Some were given the option to opt-in to being an organ donor (being a non-donor is the default), others were given the option to opt-out of being a donor, and there was a control group with no default option.
+
+
+```{r}
+#| include: false
+
+organ_data <- tibble(option = rep(c("Opt-in", "Opt-out", "Neutral"), each = 50),
+                       choice = c(rep("Donor", 21), rep("Non-Donor", 29), 
+                                   rep("Donor", 41), rep("Non-Donor", 9),
+                                  rep("Donor", 39), rep("Non-Donor", 11)))
+print(organ_data, n = Inf)
+
+sample(organ_data$option)
+```
+
+
+
+
+```{r}
+#| include: false
+
+histogram <- function(dataset, xvar, value)  {
+  ggplot() +
+    geom_histogram(data = dataset, mapping = aes(x = {{ xvar }})) +
+    geom_vline(xintercept = value, color = "red")  
+    }
+```
+
+
+```{r}
+#| include: false 
+#opt in vs neutral#
+
+organ_summary1 <- organ_data |>
+  group_by(option) |>
+  summarize(prop_donor = mean(choice == "Donor"))
+observed_diff1 <- organ_summary1[[2]][2] - organ_summary1[[2]][1]
+
+```
+
+```{r}
+#| include: false
+simulated_diffs1 <- vector("double", 1000)
+for(i in 1:1000) {
+  organ_summary1 <- organ_data |>
+    mutate(option = sample(option)) |>
+    group_by(option) |>
+    summarize(prop_donor = mean(choice == "Donor"))
+  simulated_diffs1[[i]] <- organ_summary1[[2]][2] - organ_summary1[[2]][1]}
+```
+
+```{r, echo = FALSE}
+#| warning: false
+null_hypothesis1 <- tibble(simulated_diffs1 = simulated_diffs1)
+
+histogram(dataset = null_hypothesis1, xvar = simulated_diffs1, value = observed_diff1) + labs(title = "Simulated Differences in Donor Rates Between Opt-in and Neutral") + theme_update()
+
+p_value1 <- sum(abs(simulated_diffs1) >= abs(observed_diff1)) / 1000
+p_value1
+```
+
+The plot depicts a histogram of the 1000 simulated differences between the rate of donors when given the option to opt-in to being a donor compared to when the option is neutral. The histogram is approximately normal and centered at zero. The red line marks the observed difference between opt-in and neutral which is -0.36. This means that from the observed data, when the option is neutral we can expect donor rates to be 36% higher than when participants have to opt-in to being a donor. Additionally, the p value is < 0.05 which means there is a significant difference between the two groups.
+
+```{r}
+#| include: false
+#opt-out vs neutral#
+organ_summary3 <- organ_data |>
+  group_by(option) |>
+  summarize(prop_donor = mean(choice == "Donor"))
+observed_diff3 <- organ_summary3[[2]][3] - organ_summary3[[2]][1]
+```
+
+```{r}
+#| include: false
+simulated_diffs3 <- vector("double", 1000)
+for(i in 1:1000) {
+  organ_summary3 <- organ_data |>
+    mutate(option = sample(option)) |>
+    group_by(option) |>
+    summarize(prop_donor = mean(choice == "Donor"))
+  simulated_diffs3[[i]] <- organ_summary3[[2]][3] - organ_summary3[[2]][1]}
+```
+
+```{r,echo = FALSE}
+#| warning: false
+null_hypothesis3 <- tibble(simulated_diffs3 = simulated_diffs3)
+
+histogram(dataset = null_hypothesis3, xvar = simulated_diffs3, value = observed_diff3) + labs(title = "Simulated Differences in Donor Rates Between Opt-out and Neutral") + theme_update()
+
+p_value3 <- sum(abs(simulated_diffs3) >= abs(observed_diff3)) / 1000
+p_value3
+```
+
+The plot depicts a histogram of the 1000 simulated differences between the rate of donors when given the option to opt-out to being a donor compared to when the option is neutral. The histogram is approximately normal and centered at zero. The red line marks the observed difference between opt-out and neutral which is 0.04. This means that from the observed data, when the option is neutral we can expect donor rates to be 4% lower than when participants have to opt-out of being a donor. Additionally, the p value is > 0.05 which means there is not a significant difference between the two groups.
+
+
+In conclusion, there is a significant difference in donor rates between the options of opt-in and neutral. There is not a significant difference in donor rates between opt-out and neutral. Therefore, if a state wanted to increase donor rates, based off this study, they should either have citizens choose to opt-out of being a donor or phrase the question in a neutral way.
+
+##chi squared?
+
+```{r}
+organ2 <- matrix(c(21,29,41,9,39,11), ncol=2, byrow=TRUE)
+colnames(organ2) <- c("Donor", "Non-Donor")
+rownames(organ2) <- c("Opt-in","Opt-out","Neutral")
+organ2 <- as.table(organ2)
+```
+
+
+```{r}
+chisq <- chisq.test(organ2)$p.value
+```
