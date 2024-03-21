@@ -80,13 +80,13 @@ for(i in 1:1000) {
 #| warning: FALSE
 null_hypothesis2 <- tibble(chisq2 = chisq2)
 
-histogram(dataset = null_hypothesis2, xvar = chisq2, value = chisq_s, title = "Simulated Chi-Squared Test Statistic", x = "Chi-Squared Values")
+histogram(dataset = null_hypothesis2, xvar = chisq2, value = chisq_s, title = "Simulated Chi-Squared Test Statistics", x = "Chi-Squared Values")
 
 p_value2 <- sum(abs(chisq2) >= abs(chisq_s)) / 1000
 p_value2
 ```
 
-The plot depicts a histogram of the 1000 simulated chi-squared values for the data. The histogram is skewed right, which is expected for a chi-squared distribution. The red line marks the chi-squared statistic for the observed data which is 22.1. The difference between the simulated chi-squared values and the observed value, along with the p value < 0.05 tells us there is significant evidence that the different options of opt-in, opt-out, and neutral have an effect on whether or not individuals decide to be a donor.
+The plot depicts a histogram of the 1000 simulated chi-squared values for the data. The histogram is skewed right, which is expected for a chi-squared distribution. The red line marks the chi-squared statistic for the observed data which is 22.1. The p value (stated above) is < 0.05 which tells us there is a significant difference between the simulated and observed chi-squared statistics. There is significant evidence that the different options of opt-in, opt-out, and neutral do have an effect on whether or not individuals decide to be a donor.
 
 
 Then I decided to look specifically at the effect of Opt-in or Opt-out when compared to Neutral.
@@ -127,7 +127,7 @@ p_value1 <- sum(abs(simulated_diffs1) >= abs(observed_diff1)) / 1000
 p_value1
 ```
 
-The plot depicts a histogram of the 1000 simulated differences between the rate of donors when given the option to opt-in to being a donor compared to when the option is neutral. The histogram is approximately normal and centered at zero. The red line marks the observed difference between opt-in and neutral which is -0.36. This means that from the observed data, when the option is neutral we can expect donor rates to be 36% higher than when participants have to opt-in to being a donor. Additionally, the p value is < 0.05 which means there is a significant difference between the two groups.
+The plot depicts a histogram of the 1000 simulated differences between the rate of donors when given the option to opt-in to being a donor compared to when the option is neutral. The histogram is approximately normal and centered at zero. The red line marks the observed difference between opt-in and neutral which is -0.36. This means that from the observed data, when the option is neutral we can expect donor rates to be 36% higher than when participants have to opt-in to being a donor. Additionally, the p value (stated above) is < 0.05 which means there is a significant difference between the two groups.
 
 ```{r}
 #| include: false
@@ -163,9 +163,9 @@ p_value3 <- sum(abs(simulated_diffs3) >= abs(observed_diff3)) / 1000
 p_value3
 ```
 
-The plot depicts a histogram of the 1000 simulated differences between the rate of donors when given the option to opt-out to being a donor compared to when the option is neutral. The histogram is approximately normal and centered at zero. The red line marks the observed difference between opt-out and neutral which is 0.04. This means that from the observed data, when the option is neutral we can expect donor rates to be 4% lower than when participants have to opt-out of being a donor. Additionally, the p value is > 0.05 which means there is not a significant difference between the two groups.
+The plot depicts a histogram of the 1000 simulated differences between the rate of donors when given the option to opt-out to being a donor compared to when the option is neutral. The histogram is approximately normal and centered at zero. The red line marks the observed difference between opt-out and neutral which is 0.04. This means that from the observed data, when the option is neutral we can expect donor rates to be 4% lower than when participants have to opt-out of being a donor. Additionally, the p value (stated above) is > 0.05 which means there is not a significant difference between the two groups.
 
 
 
-In conclusion, the Chi-Squared test told us that the choice to be a donor is definitely related to the different options that are given. When taking a closer look at the different options, we can conclude that there is a significant difference in donor rates between the options of opt-in and neutral. There is not a significant difference in donor rates between opt-out and neutral. Therefore, if a state wanted to increase donor rates, based off this study and the simulation, they should either have citizens choose to opt-out of being a donor or phrase the question in a neutral way.
+In conclusion, the Chi-Squared test told us that the choice to be a donor is definitely related to the different options that are given. When taking a closer look at the different options, we can conclude that there is a significant difference in donor rates between the options of opt-in and neutral. There is not a significant difference in donor rates between opt-out and neutral. Therefore, if a state wanted to have high donor rates, based off this study and the simulation, they should either make citizens have to opt-out of being a donor or phrase the question in a neutral way.
 
