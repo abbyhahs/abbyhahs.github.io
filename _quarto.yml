@@ -14,6 +14,8 @@ website:
       - sidebar:Maps
       - file: simulation.qmd
         text: "Simulation"
+      - file: strings_expressions.qmd
+        text: "Strings and Regular Expressions"
       
 
   sidebar:

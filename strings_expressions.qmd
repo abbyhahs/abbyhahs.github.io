@@ -1,0 +1,98 @@
+---
+title: "Strings and Regular Expressions"
+sidebar: false
+format:
+  html: default
+editor_options: 
+  chunk_output_type: console
+---
+
+- plot1: histogram of tweets, x axis = date, x intercept for time in office, maybe when he was banned, color
+
+- plot2: 
+
+- str1:
+
+- str2:
+
+- str3:
+
+- reg1:
+
+- reg2: 
+
+- reg3: 
+
+
+capital letters vs amount of likes or retweets
+
+can i count a word that appears the most?
+
+use of @ and the number of likes/ retweets
+
+regular expressions, patterns maybe? Start with a capital
+
+look at months?
+
+
+```{r}
+#| include: false
+
+library(tidyverse)
+
+trump_tweets <- read_csv("C:/Users/abbyh/Downloads/MSCS 264/trump_tweets.csv.zip")
+```
+
+```{r}
+#| include: false
+
+trump_tweets2 <- trump_tweets |>
+  filter(is_retweet == "FALSE") |>
+  select(text, is_retweet, is_deleted, favorites, retweets, is_flagged, date) |>
+  filter(date >= "2016-01-20")
+```
+
+^ filtered to be tweets from 1 year before elected pres to the day he was banned. 
+
+Trump is very well know for his use of twitter leading up to and during his presidency.
+
+```{r}
+trump_tweets2 |>
+  ggplot(aes(x = date)) +
+  geom_histogram() + 
+  theme_minimal() 
+```
+
+```{r}
+trump_tweets2 |>
+  select(text) |>
+  mutate(n_capitals = str_count(text, "\\b[A-Z][A-Z][A-Z][A-Z]\\b")) |>
+  filter(n_capitals > 0)
+```
+
+```{r}
+as_tibble(trump_tweets2) |>
+  select(text, date) |>
+  mutate(num_caps = str_count(text, "\\b[A-Z][A-Z][A-Z]\\b"), 
+         total_caps = sum(num_caps),
+         prop_caps = (num_caps/total_caps)) |>
+  slice_max(prop_caps,n = 5)
+```
+
+
+```{r}
+trump_tweets2 |>
+  select(text, favorites, retweets) |>
+  mutate(ats = str_extract(text, "@")) |>
+  filter(ats != "NA")
+```
+
+
+
+
+```{r}
+#str_view(text, "")
+```
+
+
+---- extract year, group by year
