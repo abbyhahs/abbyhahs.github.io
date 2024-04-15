@@ -7,37 +7,14 @@ editor_options:
   chunk_output_type: console
 ---
 
-- plot1: histogram of tweets, x axis = date, x intercept for time in office, maybe when he was banned, color
-
-- plot2: 
-
-- str1:
-
-- str2:
-
-- str3:
-
-- reg1:
-
-- reg2: 
-
-- reg3: 
-
-
-capital letters vs amount of likes or retweets
-
-can i count a word that appears the most?
-
-use of @ and the number of likes/ retweets
-
-regular expressions, patterns maybe? Start with a capital
-
-look at months?
-
 
 ```{r}
 #| include: false
 
+library(stopwords)
+library(tidyr)
+library(dplyr)
+library(ggplot2)
 library(tidyverse)
 
 trump_tweets <- read_csv("C:/Users/abbyh/Downloads/MSCS 264/trump_tweets.csv.zip")
@@ -45,54 +22,161 @@ trump_tweets <- read_csv("C:/Users/abbyh/Downloads/MSCS 264/trump_tweets.csv.zip
 
 ```{r}
 #| include: false
+#| show: false
 
 trump_tweets2 <- trump_tweets |>
-  filter(is_retweet == "FALSE") |>
   select(text, is_retweet, is_deleted, favorites, retweets, is_flagged, date) |>
-  filter(date >= "2016-01-20")
+  filter(date >= "2016-01-20") |>
+  distinct(text, is_retweet, is_deleted, favorites, retweets, is_flagged, date)
 ```
 
-^ filtered to be tweets from 1 year before elected pres to the day he was banned. 
-
-Trump is very well know for his use of twitter leading up to and during his presidency.
 
 ```{r}
-trump_tweets2 |>
-  ggplot(aes(x = date)) +
-  geom_histogram() + 
-  theme_minimal() 
+#| include: false
+#| show: false
+
+tt <- trump_tweets2 |>
+   mutate(year = str_extract(date, "\\d{4}"))
 ```
 
-```{r}
-trump_tweets2 |>
-  select(text) |>
-  mutate(n_capitals = str_count(text, "\\b[A-Z][A-Z][A-Z][A-Z]\\b")) |>
-  filter(n_capitals > 0)
-```
+Donald Trump is very well known for his use of the Twitter platform to promote his campaign and his strong opinions. He was very vocal on the platform and is the only President to have been banned from Twitter. 
+
+Below is a graph of all Trump's tweets from his account @realDonaldTrump starting on January 1, 2016, one year before he was inaugurated President and ending January 8, 2021, the day he was temporarily banned from Twitter. The vertical red lines represent the start and end of Trump's presidency. As we can see, the amount of tweets greatly increases and stays high during and after the 2020 election season. There is also a relatively low number of tweets during the start of his presidency.
 
 ```{r}
+#| echo: false
+
+# graph of all of trumps tweets starting in 2016 and ending in 2021, presidency is labeled
+
 as_tibble(trump_tweets2) |>
-  select(text, date) |>
-  mutate(num_caps = str_count(text, "\\b[A-Z][A-Z][A-Z]\\b"), 
-         total_caps = sum(num_caps),
-         prop_caps = (num_caps/total_caps)) |>
-  slice_max(prop_caps,n = 5)
+  mutate(dates = as.Date(date)) |>
+  ggplot(aes(x = dates)) +
+  geom_histogram(bins = 100) + 
+  theme_minimal() +
+  geom_vline(aes(xintercept = as.Date("2017-01-20"), color = "red"), show.legend = F) +
+  geom_vline(aes(xintercept = as.Date("2020-01-20"), color = "red"), show.legend = F) +
+  annotate("text", x = as.Date("2017-01-20"), y = Inf, label = "Inauguration 2017", vjust = 1, color = "black") +
+  annotate("text", x = as.Date("2020-01-20"), y = Inf, label = "End of Term 2020", vjust = 1, color = "black") +
+  labs(x = "Date", y = "Count", title = "Trump Tweets from January 1, 2016 to January 8, 2021")
 ```
-
 
 ```{r}
-trump_tweets2 |>
-  select(text, favorites, retweets) |>
-  mutate(ats = str_extract(text, "@")) |>
-  filter(ats != "NA")
+#| echo: false
+
+# analytics of trumps tweets by year... total tweets, number of capital letters, total likes, and total retweets
+
+trump_tweets2 |> 
+  select(date, text, favorites, retweets) |>
+  mutate(year = str_extract(date, "\\d{4}")) |>
+  mutate(n_capitals = str_count(text, "[A-Z]")) |>
+  group_by(year) |>
+  filter(n_capitals > 0) |>
+  summarize(total_tweets = n(),
+            total_capital_letters = sum(n_capitals),
+            total_favorites = sum(favorites),
+            total_retweets = sum(retweets))
 ```
 
+Above is the analytics of Trump's tweets by year. Keeping in mind that the 2021 data includes only eight days, we observe that 2017 had the least amount of tweets and 2020 had the most. 2020 had the most capital letters, likes and retweets, which makes sense given that it is also the year with the most tweets. It's clear that Trump became more active on twitter toward the end of his term and especially when promoting his campaign for re-election.
 
-
+Next, I decided to look at the five accounts that Trump retweeted the most. I found that Trump most often retweeted tweets from his own account and his second most retweeted account was the White House. GOPChairwoman, DanScavino, and TeamTrump were the 3rd - 5th most retweeted accounts.
 
 ```{r}
-#str_view(text, "")
+#| echo: false
+
+# 5 accounts that Trump retweeted most often
+
+tt |>
+  select(text, year, favorites) |>
+  filter(str_detect(text, "^RT")) |>
+  mutate(retweet = str_extract(text, "@([^[\\B]]+[:$]\\s)")) |>
+  filter(retweet != is.na(retweet)) |>
+  group_by(retweet) |>
+  count(retweet) |>
+  arrange(desc(n)) |>
+  head(n = 5)
+```
+
+From this data, I then looked at the date and amount of retweets of Trump's most commonly retweeted accounts.
+
+```{r}
+#| echo: false
+
+# Graph that measures the date and amount of retweets of the trumps most commonly retweeted accounts
+
+as_tibble(tt) |>
+  select(text, year, favorites, date, retweets) |>
+  filter(str_detect(text, "^RT")) |>
+  mutate(retweet = str_extract(text, "@([^[\\B]]+[:$]\\s)")) |>
+  filter((retweet %in% c("@realDonaldTrump: ", "@WhiteHouse: ", "@GOPChairwoman: ", "@DanScavino: ", "@TeamTrump: "))) |>
+  ggplot(aes(y = retweet, x = date, fill = retweet)) +
+  geom_violin() + 
+  theme_minimal() +
+  labs(x = "Date", y = "Five Most Retweeted Accounts", fill = "Trump Retweets", title = "Trump's Most Commonly Retweeted Accounts")
 ```
 
 
----- extract year, group by year
+Looking at each account individually, 
+
+@DanScavino's tweets were most commonly retweeted by Trump in 2020/2021, which makes sense given that Scavino was the White House Deputy Chief of Staff of Communications for the Trump administration beginning in 2020.
+
+The @GOPChairwoman account was ran by Ronna McDaniel who was the Republican National Committee chairwoman. 
+
+@realDonaldTrump is Trump's personal account and he often retweeted his own tweets, especially leading up to and after the 2020 election.
+
+@TeamTrump was used mostly during Trump's campaign times, which explains why it was mostly retweeted during election season.
+
+@WhiteHouse is the official account of the White House and we can see it was mostly retweeted during Trump's time in office. 
+
+Below are Trump's ten most commonly used two word phrases.
+
+```{r}
+#| echo: false
+#| warning: false
+
+stopword <- as_tibble(stopwords(language = "en"))
+
+text <- as_tibble(tt) |>
+  select(text, date, favorites)
+
+
+words2 <- text |>
+  mutate(words = str_extract_all(text, "\\b[\\w']+\\s+[\\w']+\\b")) |>
+  unnest(words) |>
+  separate(words, into = c('word1', 'word2'), sep = ' ') |>
+  anti_join(stopword, by = c("word1" = "value")) |>
+  anti_join(stopword, by = c("word2" = "value")) |>
+  unite(two_words, c(word1, word2), sep = ' ') 
+  
+word_count <- words2 |>
+  count(two_words) |>
+  arrange(desc(n)) 
+head(word_count, 10)
+```
+
+After seeing these phrases, I plotted them to see when these phrases appeared in Trump's tweets.
+
+```{r}
+#| echo: false
+
+top_ten <- words2 |>
+  group_by(two_words) |>
+  filter((two_words %in% c("Fake News", "President Trump", "Joe Biden", "GREAT AGAIN", "United States", "THANK YOU", "MAKE AMERICA", "Crooked Hillary", "New York", "The Democrats")))
+
+
+top_ten |> 
+  group_by(two_words) |>
+ggplot(aes(x = date, fill = two_words)) + 
+  geom_density() +
+  facet_wrap(vars(two_words)) + 
+  theme_minimal() +
+  labs(x = "Date", color = "Most Common Phrases", fill = "Most Common Phrases", title = "Trump's Usage of his 10 Most Common Phrases over Time")
+```
+
+- The phrase "Crooked Hillary" was used most often during the 2017 election season, which makes sense given that Hillary Clinton was Trump's main competitor for the 2017 election.
+
+- The phrases "Make America" and "Great Again" were used pretty evenly throughout Trump's presidency, which is expected given that "Make America Great Again" was his main campaign slogan.
+
+- "Fake News", "New York", "President Trump", "Thank you", "The Democrats", and "United States" were all used more often towards the end of Trump's presidency and during the 2020 election.
+
+- "Joe Biden" was used heavily during the end 2020 and 2021, which was when Biden was running for office against Trump.

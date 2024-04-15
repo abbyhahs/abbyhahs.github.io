@@ -20,40 +20,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
@@ -176,102 +142,83 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<ul>
-<li><p>plot1: histogram of tweets, x axis = date, x intercept for time in office, maybe when he was banned, color</p></li>
-<li><p>plot2:</p></li>
-<li><p>str1:</p></li>
-<li><p>str2:</p></li>
-<li><p>str3:</p></li>
-<li><p>reg1:</p></li>
-<li><p>reg2:</p></li>
-<li><p>reg3:</p></li>
-</ul>
-<p>capital letters vs amount of likes or retweets</p>
-<p>can i count a word that appears the most?</p>
-<p>use of @ and the number of likes/ retweets</p>
-<p>regular expressions, patterns maybe? Start with a capital</p>
-<p>look at months?</p>
-<p>^ filtered to be tweets from 1 year before elected pres to the day he was banned.</p>
-<p>Trump is very well know for his use of twitter leading up to and during his presidency.</p>
+<p>Donald Trump is very well known for his use of the Twitter platform to promote his campaign and his strong opinions. He was very vocal on the platform and is the only President to have been banned from Twitter.</p>
+<p>Below is a graph of all Trump’s tweets from his account <span class="citation" data-cites="realDonaldTrump">@realDonaldTrump</span> starting on January 1, 2016, one year before he was inaugurated President and ending January 8, 2021, the day he was temporarily banned from Twitter. The vertical red lines represent the start and end of Trump’s presidency. As we can see, the amount of tweets greatly increases and stays high during and after the 2020 election season. There is also a relatively low number of tweets during the start of his presidency.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>trump_tweets2 <span class="sc">|&gt;</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> date)) <span class="sc">+</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>() <span class="sc">+</span> </span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
-</div>
 <div class="cell-output-display">
-<p><img src="strings_expressions_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
+<p><img src="strings_expressions_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>trump_tweets2 <span class="sc">|&gt;</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(text) <span class="sc">|&gt;</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">n_capitals =</span> <span class="fu">str_count</span>(text, <span class="st">"</span><span class="sc">\\</span><span class="st">b[A-Z][A-Z][A-Z][A-Z]</span><span class="sc">\\</span><span class="st">b"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(n_capitals <span class="sc">&gt;</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 3,385 × 2
-   text                                                               n_capitals
-   &lt;chr&gt;                                                                   &lt;int&gt;
- 1 "HUGE win today for the United States and for peace in the world.…          1
- 2 "11 DAYS! #MAGA https://t.co/PuqeF1ctDs"                                    2
- 3 "THANK YOU OHIO! #VOTE \nhttps://t.co/5EJjFZVLHZ"                           2
- 4 "How can you certify an election when the numbers being certified…          1
- 5 "Polls numbers are looking very strong. Big crowds, great enthusi…          1
- 6 "Thank you LIBERTARIANS. We are getting it all done, and FAST! VO…          2
- 7 "...AND I WON THE ELECTION. VOTER FRAUD ALL OVER THE COUNTRY! htt…          1
- 8 "Thank you OHIO! #VOTE\nhttps://t.co/gsFSghkmdM https://t.co/oOzm…          2
- 9 "I strongly stand with Kelly &amp; David. They are both great and MUS…          1
-10 "Georgia, get out and VOTE for two great Senators, @KLoeffler and…          1
-# ℹ 3,375 more rows</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as_tibble</span>(trump_tweets2) <span class="sc">|&gt;</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(text, date) <span class="sc">|&gt;</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">num_caps =</span> <span class="fu">str_count</span>(text, <span class="st">"</span><span class="sc">\\</span><span class="st">b[A-Z][A-Z][A-Z]</span><span class="sc">\\</span><span class="st">b"</span>), </span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">total_caps =</span> <span class="fu">sum</span>(num_caps),</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">prop_caps =</span> (num_caps<span class="sc">/</span>total_caps)) <span class="sc">|&gt;</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_max</span>(prop_caps,<span class="at">n =</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 5
-  text                                  date       num_caps total_caps prop_caps
-  &lt;chr&gt;                                 &lt;date&gt;        &lt;int&gt;      &lt;int&gt;     &lt;dbl&gt;
-1 WHY DID HE REFUSE TO ENDORSE SLOW JO… 2020-08-20       14       4799   0.00292
-2 THE OBSERVERS WERE NOT ALLOWED INTO … 2020-11-07       12       4799   0.00250
-3 NOW THAT THE RADICAL LEFT DEMOCRATS … 2020-10-07       12       4799   0.00250
-4 NOW THAT THE RADICAL LEFT DEMOCRATS … 2020-10-07       12       4799   0.00250
-5 IF OUR FORMALLY TARGETED FARMERS NEE… 2020-02-21       11       4799   0.00229
-6 HAPPY NEW YEAR TO EVERYONE, INCLUDIN… 2019-01-01       11       4799   0.00229</code></pre>
+  year  total_tweets total_capital_letters total_favorites total_retweets
+  &lt;chr&gt;        &lt;int&gt;                 &lt;int&gt;           &lt;dbl&gt;          &lt;dbl&gt;
+1 2016          3982                 46751        71645843       25618233
+2 2017          2598                 30731       161523601       38051871
+3 2018          3566                 49598       234277534       57871171
+4 2019          7813                100993       365992656      113768353
+5 2020         12223                161083       729630178      233935942
+6 2021           156                  1840        21737052        6032036</code></pre>
 </div>
 </div>
+<p>Above is the analytics of Trump’s tweets by year. Keeping in mind that the 2021 data includes only eight days, we observe that 2017 had the least amount of tweets and 2020 had the most. 2020 had the most capital letters, likes and retweets, which makes sense given that it is also the year with the most tweets. It’s clear that Trump became more active on twitter toward the end of his term and especially when promoting his campaign for re-election.</p>
+<p>Next, I decided to look at the five accounts that Trump retweeted the most. I found that Trump most often retweeted tweets from his own account and his second most retweeted account was the White House. GOPChairwoman, DanScavino, and TeamTrump were the 3rd - 5th most retweeted accounts.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>trump_tweets2 <span class="sc">|&gt;</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(text, favorites, retweets) <span class="sc">|&gt;</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ats =</span> <span class="fu">str_extract</span>(text, <span class="st">"@"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(ats <span class="sc">!=</span> <span class="st">"NA"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 4,608 × 4
-   text                                                 favorites retweets ats  
-   &lt;chr&gt;                                                    &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;
- 1 "Nevada is turning out to be a cesspool of Fake Vot…    363489    78378 @    
- 2 "Wisconsin is looking very good. Needs a little tim…    347994    61006 @    
- 3 "How can you certify an election when the numbers b…    211508    56945 @    
- 4 "“We’ve seen in the last few months, unprecedented …    249177    53966 @    
- 5 "“We are not acting to thwart the Democratic proces…    272308    60779 @    
- 6 "Very good reviews on last night’s @NBCNews Town Ha…    148717    23968 @    
- 7 "This is good news, it means I won!&nbsp;\ncc: @RepDougC…    258866    55635 @    
- 8 "As I have long said, @Pfizer and the others would …    292245    59870 @    
- 9 ".@FoxNews, @QuinnipiacPoll, ABC/WaPo, NBC/WSJ were…    254530    53987 @    
-10 "Pleased to announce that @KLoeffler &amp; @sendavidper…    177332    42347 @    
-# ℹ 4,598 more rows</code></pre>
+<pre><code># A tibble: 5 × 2
+# Groups:   retweet [5]
+  retweet                  n
+  &lt;chr&gt;                &lt;int&gt;
+1 "@realDonaldTrump: "   966
+2 "@WhiteHouse: "        438
+3 "@GOPChairwoman: "     185
+4 "@DanScavino: "        150
+5 "@TeamTrump: "         139</code></pre>
 </div>
 </div>
+<p>From this data, I then looked at the date and amount of retweets of Trump’s most commonly retweeted accounts.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">#str_view(text, "")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="strings_expressions_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
 </div>
-<p>—- extract year, group by year</p>
+</div>
+<p>Looking at each account individually,</p>
+<p><span class="citation" data-cites="DanScavino">@DanScavino</span>’s tweets were most commonly retweeted by Trump in 2020/2021, which makes sense given that Scavino was the White House Deputy Chief of Staff of Communications for the Trump administration beginning in 2020.</p>
+<p>The <span class="citation" data-cites="GOPChairwoman">@GOPChairwoman</span> account was ran by Ronna McDaniel who was the Republican National Committee chairwoman.</p>
+<p><span class="citation" data-cites="realDonaldTrump">@realDonaldTrump</span> is Trump’s personal account and he often retweeted his own tweets, especially leading up to and after the 2020 election.</p>
+<p><span class="citation" data-cites="TeamTrump">@TeamTrump</span> was used mostly during Trump’s campaign times, which explains why it was mostly retweeted during election season.</p>
+<p><span class="citation" data-cites="WhiteHouse">@WhiteHouse</span> is the official account of the White House and we can see it was mostly retweeted during Trump’s time in office.</p>
+<p>Below are Trump’s ten most commonly used two word phrases.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 2
+   two_words           n
+   &lt;chr&gt;           &lt;int&gt;
+ 1 Fake News         406
+ 2 President Trump   393
+ 3 Joe Biden         312
+ 4 GREAT AGAIN       281
+ 5 United States     277
+ 6 THANK YOU         270
+ 7 MAKE AMERICA      267
+ 8 Crooked Hillary   231
+ 9 New York          205
+10 The Democrats     203</code></pre>
+</div>
+</div>
+<p>After seeing these phrases, I plotted them to see when these phrases appeared in Trump’s tweets.</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="strings_expressions_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<ul>
+<li><p>The phrase “Crooked Hillary” was used most often during the 2017 election season, which makes sense given that Hillary Clinton was Trump’s main competitor for the 2017 election.</p></li>
+<li><p>The phrases “Make America” and “Great Again” were used pretty evenly throughout Trump’s presidency, which is expected given that “Make America Great Again” was his main campaign slogan.</p></li>
+<li><p>“Fake News”, “New York”, “President Trump”, “Thank you”, “The Democrats”, and “United States” were all used more often towards the end of Trump’s presidency and during the 2020 election.</p></li>
+<li><p>“Joe Biden” was used heavily during the end 2020 and 2021, which was when Biden was running for office against Trump.</p></li>
+</ul>
 
 
 
