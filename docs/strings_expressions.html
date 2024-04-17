@@ -150,37 +150,111 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 <div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 5
-  year  total_tweets total_capital_letters total_favorites total_retweets
-  &lt;chr&gt;        &lt;int&gt;                 &lt;int&gt;           &lt;dbl&gt;          &lt;dbl&gt;
-1 2016          3982                 46751        71645843       25618233
-2 2017          2598                 30731       161523601       38051871
-3 2018          3566                 49598       234277534       57871171
-4 2019          7813                100993       365992656      113768353
-5 2020         12223                161083       729630178      233935942
-6 2021           156                  1840        21737052        6032036</code></pre>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 7%">
+<col style="width: 18%">
+<col style="width: 30%">
+<col style="width: 22%">
+<col style="width: 21%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">year</th>
+<th style="text-align: right;">total_tweets</th>
+<th style="text-align: right;">total_capital_letters</th>
+<th style="text-align: right;">total_favorites</th>
+<th style="text-align: right;">total_retweets</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">2016</td>
+<td style="text-align: right;">3982</td>
+<td style="text-align: right;">46751</td>
+<td style="text-align: right;">71645843</td>
+<td style="text-align: right;">25618233</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2017</td>
+<td style="text-align: right;">2598</td>
+<td style="text-align: right;">30731</td>
+<td style="text-align: right;">161523601</td>
+<td style="text-align: right;">38051871</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2018</td>
+<td style="text-align: right;">3566</td>
+<td style="text-align: right;">49598</td>
+<td style="text-align: right;">234277534</td>
+<td style="text-align: right;">57871171</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2019</td>
+<td style="text-align: right;">7813</td>
+<td style="text-align: right;">100993</td>
+<td style="text-align: right;">365992656</td>
+<td style="text-align: right;">113768353</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2020</td>
+<td style="text-align: right;">12223</td>
+<td style="text-align: right;">161083</td>
+<td style="text-align: right;">729630178</td>
+<td style="text-align: right;">233935942</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2021</td>
+<td style="text-align: right;">156</td>
+<td style="text-align: right;">1840</td>
+<td style="text-align: right;">21737052</td>
+<td style="text-align: right;">6032036</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
-<p>Above is the analytics of Trump’s tweets by year. Keeping in mind that the 2021 data includes only eight days, we observe that 2017 had the least amount of tweets. 2020 had the most capital letters, likes and retweets, which makes sense given that it is also the year with the most tweets. It’s clear that Trump became more active on Twitter toward the end of his term and especially when promoting his campaign for re-election in 2020.</p>
+<p>Above are the analytics of Trump’s tweets by year. Keeping in mind that the 2021 data includes only eight days, we observe that 2017 had the least amount of tweets. 2020 had the most capital letters, likes and retweets, which makes sense given that it is also the year with the most tweets. It’s clear that Trump became more active on Twitter toward the end of his term and especially when promoting his campaign for re-election in 2020.</p>
 <p>Next, I decided to look at the five accounts that Trump retweeted the most. I found that Trump most often retweeted tweets from his own account (realDonaldTrump) and his second most retweeted account was the White House. GOP Chairwoman, Dan Scavino, and Team Trump were the 3rd - 5th most retweeted accounts.</p>
 <div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 5 × 2
-# Groups:   retweet [5]
-  retweet                  n
-  &lt;chr&gt;                &lt;int&gt;
-1 "@realDonaldTrump: "   966
-2 "@WhiteHouse: "        438
-3 "@GOPChairwoman: "     185
-4 "@DanScavino: "        150
-5 "@TeamTrump: "         139</code></pre>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">retweet</th>
+<th style="text-align: right;">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><span class="citation" data-cites="realDonaldTrump">@realDonaldTrump</span>:</td>
+<td style="text-align: right;">966</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="citation" data-cites="WhiteHouse">@WhiteHouse</span>:</td>
+<td style="text-align: right;">438</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="citation" data-cites="GOPChairwoman">@GOPChairwoman</span>:</td>
+<td style="text-align: right;">185</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="citation" data-cites="DanScavino">@DanScavino</span>:</td>
+<td style="text-align: right;">150</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="citation" data-cites="TeamTrump">@TeamTrump</span>:</td>
+<td style="text-align: right;">139</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <p>From this data, I then looked at the date and amount of retweets of Trump’s most commonly retweeted accounts.</p>
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="strings_expressions_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+<p><img src="strings_expressions_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>Looking at each account individually,</p>
@@ -191,26 +265,63 @@ ul.task-list li input[type="checkbox"] {
 <p><span class="citation" data-cites="WhiteHouse">@WhiteHouse</span> is the official account of the White House and we can see it was mostly retweeted during Trump’s time in office.</p>
 <p>Below are Trump’s ten most commonly used two word phrases.</p>
 <div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 10 × 2
-   two_words           n
-   &lt;chr&gt;           &lt;int&gt;
- 1 Fake News         406
- 2 President Trump   393
- 3 Joe Biden         312
- 4 GREAT AGAIN       281
- 5 United States     277
- 6 THANK YOU         270
- 7 MAKE AMERICA      267
- 8 Crooked Hillary   231
- 9 New York          205
-10 The Democrats     203</code></pre>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">two_words</th>
+<th style="text-align: right;">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Fake News</td>
+<td style="text-align: right;">406</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">President Trump</td>
+<td style="text-align: right;">393</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Joe Biden</td>
+<td style="text-align: right;">312</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">GREAT AGAIN</td>
+<td style="text-align: right;">281</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">United States</td>
+<td style="text-align: right;">277</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">THANK YOU</td>
+<td style="text-align: right;">270</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MAKE AMERICA</td>
+<td style="text-align: right;">267</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Crooked Hillary</td>
+<td style="text-align: right;">231</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">New York</td>
+<td style="text-align: right;">205</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">The Democrats</td>
+<td style="text-align: right;">203</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <p>After seeing these phrases, I plotted them to see when these phrases appeared in Trump’s tweets.</p>
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="strings_expressions_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+<p><img src="strings_expressions_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <ul>

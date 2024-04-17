@@ -15,6 +15,7 @@ library(stopwords)
 library(tidyr)
 library(dplyr)
 library(forcats)
+library(kableExtra)
 library(ggplot2)
 library(tidyverse)
 
@@ -62,11 +63,11 @@ as_tibble(trump_tweets2) |>
 ```
 
 ```{r}
-#| echo: false
+#| include: false
 
 # analytics of trumps tweets by year... total tweets, number of capital letters, total likes, and total retweets
 
-trump_tweets2 |> 
+tweets <- trump_tweets2 |> 
   select(date, text, favorites, retweets) |>
   mutate(year = str_extract(date, "\\d{4}")) |>
   mutate(n_capitals = str_count(text, "[A-Z]")) |>
@@ -79,16 +80,21 @@ trump_tweets2 |>
 
 ```
 
-Above is the analytics of Trump's tweets by year. Keeping in mind that the 2021 data includes only eight days, we observe that 2017 had the least amount of tweets. 2020 had the most capital letters, likes and retweets, which makes sense given that it is also the year with the most tweets. It's clear that Trump became more active on Twitter toward the end of his term and especially when promoting his campaign for re-election in 2020.
+```{r}
+#| echo: false
+kable(tweets)
+```
+
+Above are the analytics of Trump's tweets by year. Keeping in mind that the 2021 data includes only eight days, we observe that 2017 had the least amount of tweets. 2020 had the most capital letters, likes and retweets, which makes sense given that it is also the year with the most tweets. It's clear that Trump became more active on Twitter toward the end of his term and especially when promoting his campaign for re-election in 2020.
 
 Next, I decided to look at the five accounts that Trump retweeted the most. I found that Trump most often retweeted tweets from his own account (realDonaldTrump) and his second most retweeted account was the White House. GOP Chairwoman, Dan Scavino, and Team Trump were the 3rd - 5th most retweeted accounts.
 
 ```{r}
-#| echo: false
+#| include: false
 
 # 5 accounts that Trump retweeted most often
 
-tt |>
+retweetsss <- tt |>
   select(text, year, favorites) |>
   filter(str_detect(text, "^RT")) |>
   mutate(retweet = str_extract(text, "@([^[\\B]]+[:$]\\s)")) |>
@@ -98,6 +104,12 @@ tt |>
   arrange(desc(n)) |>
   head(n = 5)
 ```
+
+```{r}
+#| echo: false
+kable(retweetsss)
+```
+
 
 From this data, I then looked at the date and amount of retweets of Trump's most commonly retweeted accounts.
 
@@ -135,6 +147,7 @@ Below are Trump's ten most commonly used two word phrases.
 ```{r}
 #| echo: false
 #| warning: false
+#| include: false
 
 stopword <- as_tibble(stopwords(language = "en"))
 
@@ -149,11 +162,17 @@ words2 <- text |>
   anti_join(stopword, by = c("word1" = "value")) |>
   anti_join(stopword, by = c("word2" = "value")) |>
   unite(two_words, c(word1, word2), sep = ' ') 
-  
-word_count <- words2 |>
+
+pop_phrases <- words2 |>
   count(two_words) |>
-  arrange(desc(n)) 
-head(word_count, 10)
+  arrange(desc(n)) |>
+  slice_head(n = 10)
+  
+```
+
+```{r}
+#| echo: false
+kable(pop_phrases)
 ```
 
 After seeing these phrases, I plotted them to see when these phrases appeared in Trump's tweets.
