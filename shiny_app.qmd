@@ -1,0 +1,12 @@
+---
+title: "Shiny App"
+sidebar: false
+format:
+  html: default
+editor_options: 
+  chunk_output_type: console
+---
+
+For our final project, we created an interactive Shiny App using Flexdashboard. Below is the link to my Shiny App.
+
+https://abbyhahs.shinyapps.io/Spotify_Audio_Analysis/

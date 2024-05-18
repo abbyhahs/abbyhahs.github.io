@@ -175,7 +175,7 @@ pop_phrases <- words2 |>
 kable(pop_phrases)
 ```
 
-After seeing these phrases, I plotted them to see when these phrases appeared in Trump's tweets.
+After seeing these phrases, I wanted to see when they appeared in his tweets from 2016 - 2021.
 
 ```{r}
 #| echo: false
@@ -200,6 +200,6 @@ ggplot(aes(x = date, fill = two_words)) +
 
 - "Fake News", "New York", "President Trump", "Thank you", "The Democrats", and "United States" were all used more often towards the end of Trump's presidency and during the 2020 election.
 
-- "Joe Biden" was used heavily during the end of 2020 and 2021, which was when Biden was running for office against Trump.
+- "Joe Biden" wasn't used until about 2019 and then was used extremely heavily during the end of 2020 and 2021, which was when Biden was running for office against Trump.
 
 In conclusion, a lot of insight into Trump's tweeting style can be gained by extracting data from his tweets and plotting the results.

@@ -16,6 +16,8 @@ website:
         text: "Simulation"
       - file: strings_expressions.qmd
         text: "Strings and Regular Expressions"
+      - file: shiny_app.qmd
+        text: "Shiny App"
       
 
   sidebar:
