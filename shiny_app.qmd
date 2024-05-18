@@ -6,4 +6,3 @@ sidebar: false
 For our final project, we created an interactive Shiny App using Flexdashboard. Below is the link to my Shiny App.
 
 [Shiny App: Spotify Audio Analysis](https://abbyhahs.shinyapps.io/Spotify_Audio_Analysis/)
-
