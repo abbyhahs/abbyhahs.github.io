@@ -1,0 +1,12 @@
+[
+  {
+    "listing": "/projects.html",
+    "items": [
+      "/Wisconsin_districts.html",
+      "/US_states.html",
+      "/strings_expressions.html",
+      "/simulation.html",
+      "/shiny_app.html"
+    ]
+  }
+]

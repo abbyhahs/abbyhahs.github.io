@@ -1,0 +1,16 @@
+---
+title: "Projects"
+listing:
+    contents:
+        - US_states.qmd
+        - Wisconsin_districts.qmd
+        - simulation.qmd
+        - strings_expressions.qmd
+        - shiny_app.qmd
+    type: grid
+    sort: "title desc"
+    sort-ui: true
+title-block-banner: true
+page-layout: full
+---
+

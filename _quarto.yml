@@ -9,24 +9,10 @@ website:
     background: primary
     search: true
     left:
-      - file: index.qmd
+      - href: index.qmd
         text: "Home"
-      - sidebar:Maps
-      - file: simulation.qmd
-        text: "Simulation"
-      - file: strings_expressions.qmd
-        text: "Strings and Regular Expressions"
-      - file: shiny_app.qmd
-        text: "Shiny App"
-      
-
-  sidebar:
-    - id: Maps
-      title: "Maps"
-      contents:
-        - US_states.qmd
-        - Wisconsin_districts.qmd
-
+      - href: projects.qmd
+        text: "Projects"
         
   page-footer:
     left: |
