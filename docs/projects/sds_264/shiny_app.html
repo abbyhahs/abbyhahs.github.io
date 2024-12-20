@@ -6,8 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="description" content="Interactive Analysis of Spotify Audio">
 
-<title>Simulation – Abby Hahs</title>
+<title>Shiny App – Abby Hahs</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,22 +24,22 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -68,7 +69,7 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 
 
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="../../styles.css">
 </head>
 
 <body class="nav-fixed">
@@ -78,7 +79,7 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Abby Hahs</span>
     </a>
   </div>
@@ -89,12 +90,12 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./index.html"> 
+    <a class="nav-link" href="../../index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./projects.html"> 
-<span class="menu-text">Projects</span></a>
+    <a class="nav-link" href="../../projects.html"> 
+<span class="menu-text">St.&nbsp;Olaf Course Projects</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -104,23 +105,28 @@ ul.task-list li input[type="checkbox"] {
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
         
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content column-page" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Simulation</h1>
+<h1 class="title">Shiny App</h1>
+</div>
+
+<div>
+  <div class="description">
+    Interactive Analysis of Spotify Audio
+  </div>
 </div>
 
 
-
-<div class="quarto-title-meta">
+<div class="quarto-title-meta column-page">
 
     
   
@@ -132,49 +138,8 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>In this study, participants were asked to imagine they moved to a new state and were filling out the form for a new drivers license. Some were given the option to opt-in to being an organ donor (being a non-donor is the default), others were given the option to opt-out of being a donor (donor is the default), and there was a neutral group with no default option.</p>
-<p>First, I ran a Chi-Squared Test to see if the response (Donor or Non-Donor) was related to the group (Opt-in, Opt-out, Neutral).</p>
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="simulation_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0</code></pre>
-</div>
-</div>
-<p>The plot depicts a histogram of the 1000 simulated chi-squared values for the data. The histogram is skewed right, which is expected for a chi-squared distribution. The red line marks the chi-squared statistic for the observed data which is 22.1. The p value (stated above) is &lt; 0.05 which tells us there is a significant difference between the simulated and observed chi-squared statistics. There is significant evidence that the different options of opt-in, opt-out, and neutral do have an effect on whether or not individuals decide to be a donor.</p>
-<p>Then I decided to look specifically at the effect of Opt-in or Opt-out when compared to Neutral.</p>
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="simulation_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0</code></pre>
-</div>
-</div>
-<p>The plot depicts a histogram of the 1000 simulated differences between the rate of donors when given the option to opt-in to being a donor compared to when the option is neutral. The histogram is approximately normal and centered at zero. The red line marks the observed difference between opt-in and neutral which is -0.36. This means that from the observed data, when the option is neutral we can expect donor rates to be 36% higher than when participants have to opt-in to being a donor. Additionally, the p value (stated above) is &lt; 0.05 which means there is a significant difference between the two groups.</p>
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="simulation_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.762</code></pre>
-</div>
-</div>
-<p>The plot depicts a histogram of the 1000 simulated differences between the rate of donors when given the option to opt-out to being a donor compared to when the option is neutral. The histogram is approximately normal and centered at zero. The red line marks the observed difference between opt-out and neutral which is 0.04. This means that from the observed data, when the option is neutral we can expect donor rates to be 4% lower than when participants have to opt-out of being a donor. Additionally, the p value (stated above) is &gt; 0.05 which means there is not a significant difference between the two groups.</p>
-<p>In conclusion, the Chi-Squared test told us that the choice to be a donor is definitely related to the different options that are given. When taking a closer look at the different options, we can conclude that there is a significant difference in donor rates between the options of opt-in and neutral. There is not a significant difference in donor rates between opt-out and neutral. Therefore, if a state wanted to have high donor rates, based off this study and the simulation, they should either make citizens have to opt-out of being a donor or phrase the question in a neutral way.</p>
+<p>For our final project, we created an interactive Shiny App using Flexdashboard. Below is the link to my Shiny App.</p>
+<p><a href="https://abbyhahs.shinyapps.io/Spotify_Audio_Analysis/">Shiny App: Spotify Audio Analysis</a></p>
 
 
 

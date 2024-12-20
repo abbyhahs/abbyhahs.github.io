@@ -1,12 +1,8 @@
 ---
-title: "Projects"
+title: "St. Olaf Course Projects"
 listing:
     contents:
-        - US_states.qmd
-        - Wisconsin_districts.qmd
-        - simulation.qmd
-        - strings_expressions.qmd
-        - shiny_app.qmd
+        - sds_264.qmd
     type: grid
     sort: "title desc"
     sort-ui: true

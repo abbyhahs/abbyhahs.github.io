@@ -12,7 +12,7 @@ website:
       - href: index.qmd
         text: "Home"
       - href: projects.qmd
-        text: "Projects"
+        text: "St. Olaf Course Projects"
         
   page-footer:
     left: |
@@ -24,7 +24,7 @@ website:
       
 format:
   html:
-    theme: yeti
+    theme: slate
     css: styles.css
     toc: true
 

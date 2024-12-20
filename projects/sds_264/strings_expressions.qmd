@@ -5,6 +5,9 @@ format:
   html: default
 editor_options: 
   chunk_output_type: console
+image: projects/sds_264/world_map.jpg
+description: "Analysis of the language used in Trump's Tweets"
+page-layout: full
 ---
 
 

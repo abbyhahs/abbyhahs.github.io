@@ -6,8 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="description" content="Analysis of the language used in Trump’s Tweets">
 
-<title>Shiny App – Abby Hahs</title>
+<title>Strings and Regular Expressions – Abby Hahs</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,22 +24,22 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -68,7 +69,7 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 
 
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="../../styles.css">
 </head>
 
 <body class="nav-fixed">
@@ -78,7 +79,7 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Abby Hahs</span>
     </a>
   </div>
@@ -89,12 +90,12 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./index.html"> 
+    <a class="nav-link" href="../../index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./projects.html"> 
-<span class="menu-text">Projects</span></a>
+    <a class="nav-link" href="../../projects.html"> 
+<span class="menu-text">St.&nbsp;Olaf Course Projects</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -104,23 +105,28 @@ ul.task-list li input[type="checkbox"] {
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
         
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content column-page" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Shiny App</h1>
+<h1 class="title">Strings and Regular Expressions</h1>
+</div>
+
+<div>
+  <div class="description">
+    Analysis of the language used in Trump’s Tweets
+  </div>
 </div>
 
 
-
-<div class="quarto-title-meta">
+<div class="quarto-title-meta column-page">
 
     
   
@@ -132,8 +138,207 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>For our final project, we created an interactive Shiny App using Flexdashboard. Below is the link to my Shiny App.</p>
-<p><a href="https://abbyhahs.shinyapps.io/Spotify_Audio_Analysis/">Shiny App: Spotify Audio Analysis</a></p>
+<p>Donald Trump is very well known for his use of the Twitter platform to promote his presidential campaign and his strong opinions. He was very vocal on the platform and is the only President to have been banned from Twitter.</p>
+<p>Below is a graph of all Trump’s tweets from his account <span class="citation" data-cites="realDonaldTrump">@realDonaldTrump</span> starting on January 1, 2016, one year before he was inaugurated President and ending January 8, 2021, the day he was temporarily banned from Twitter. The vertical red lines represent the start and end of Trump’s presidency. As we can see, the amount of tweets greatly increases and stays high during and after the 2020 election season. There is also a relatively low number of tweets during the start of his presidency.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="strings_expressions_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 7%">
+<col style="width: 18%">
+<col style="width: 30%">
+<col style="width: 22%">
+<col style="width: 21%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">year</th>
+<th style="text-align: right;">total_tweets</th>
+<th style="text-align: right;">total_capital_letters</th>
+<th style="text-align: right;">total_favorites</th>
+<th style="text-align: right;">total_retweets</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">2016</td>
+<td style="text-align: right;">3982</td>
+<td style="text-align: right;">46751</td>
+<td style="text-align: right;">71645843</td>
+<td style="text-align: right;">25618233</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2017</td>
+<td style="text-align: right;">2598</td>
+<td style="text-align: right;">30731</td>
+<td style="text-align: right;">161523601</td>
+<td style="text-align: right;">38051871</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2018</td>
+<td style="text-align: right;">3566</td>
+<td style="text-align: right;">49598</td>
+<td style="text-align: right;">234277534</td>
+<td style="text-align: right;">57871171</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2019</td>
+<td style="text-align: right;">7813</td>
+<td style="text-align: right;">100993</td>
+<td style="text-align: right;">365992656</td>
+<td style="text-align: right;">113768353</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2020</td>
+<td style="text-align: right;">12223</td>
+<td style="text-align: right;">161083</td>
+<td style="text-align: right;">729630178</td>
+<td style="text-align: right;">233935942</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2021</td>
+<td style="text-align: right;">156</td>
+<td style="text-align: right;">1840</td>
+<td style="text-align: right;">21737052</td>
+<td style="text-align: right;">6032036</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Above are the analytics of Trump’s tweets by year. Keeping in mind that the 2021 data includes only eight days, we observe that 2017 had the least amount of tweets. 2020 had the most capital letters, likes and retweets, which makes sense given that it is also the year with the most tweets. It’s clear that Trump became more active on Twitter toward the end of his term and especially when promoting his campaign for re-election in 2020.</p>
+<p>Next, I decided to look at the five accounts that Trump retweeted the most. I found that Trump most often retweeted tweets from his own account (realDonaldTrump) and his second most retweeted account was the White House. GOP Chairwoman, Dan Scavino, and Team Trump were the 3rd - 5th most retweeted accounts.</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">retweet</th>
+<th style="text-align: right;">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><span class="citation" data-cites="realDonaldTrump">@realDonaldTrump</span>:</td>
+<td style="text-align: right;">966</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="citation" data-cites="WhiteHouse">@WhiteHouse</span>:</td>
+<td style="text-align: right;">438</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="citation" data-cites="GOPChairwoman">@GOPChairwoman</span>:</td>
+<td style="text-align: right;">185</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="citation" data-cites="DanScavino">@DanScavino</span>:</td>
+<td style="text-align: right;">150</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="citation" data-cites="TeamTrump">@TeamTrump</span>:</td>
+<td style="text-align: right;">139</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>From this data, I then looked at the date and amount of retweets of Trump’s most commonly retweeted accounts.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="strings_expressions_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Looking at each account individually,</p>
+<p><span class="citation" data-cites="DanScavino">@DanScavino</span>’s tweets were most commonly retweeted by Trump between 2019 and 2021 which makes sense given that Scavino was the White House Deputy Chief of Staff of Communications for the Trump administration beginning in 2020.</p>
+<p>The <span class="citation" data-cites="GOPChairwoman">@GOPChairwoman</span> account was ran by Ronna McDaniel who was the Republican National Committee chairwoman and her tweets were mostly retweeted between 2019 and 2021.</p>
+<p><span class="citation" data-cites="realDonaldTrump">@realDonaldTrump</span> is Trump’s personal account and he often retweeted his own tweets, especially leading up to and after the 2020 election.</p>
+<p><span class="citation" data-cites="TeamTrump">@TeamTrump</span> was used mostly during Trump’s campaign times, which explains why it was mostly retweeted during election season.</p>
+<p><span class="citation" data-cites="WhiteHouse">@WhiteHouse</span> is the official account of the White House and we can see it was mostly retweeted during Trump’s time in office.</p>
+<p>Below are Trump’s ten most commonly used two word phrases.</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">two_words</th>
+<th style="text-align: right;">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Fake News</td>
+<td style="text-align: right;">406</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">President Trump</td>
+<td style="text-align: right;">393</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Joe Biden</td>
+<td style="text-align: right;">312</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">GREAT AGAIN</td>
+<td style="text-align: right;">281</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">United States</td>
+<td style="text-align: right;">277</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">THANK YOU</td>
+<td style="text-align: right;">270</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MAKE AMERICA</td>
+<td style="text-align: right;">267</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Crooked Hillary</td>
+<td style="text-align: right;">231</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">New York</td>
+<td style="text-align: right;">205</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">The Democrats</td>
+<td style="text-align: right;">203</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>After seeing these phrases, I wanted to see when they appeared in his tweets from 2016 - 2021.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="strings_expressions_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li><p>The phrase “Crooked Hillary” was used most often during the 2017 election season, which makes sense given that Hillary Clinton was Trump’s main competitor for the 2017 election.</p></li>
+<li><p>The phrases “Make America” and “Great Again” were used pretty evenly throughout Trump’s presidency, which is expected given that “Make America Great Again” was his main campaign slogan.</p></li>
+<li><p>“Fake News”, “New York”, “President Trump”, “Thank you”, “The Democrats”, and “United States” were all used more often towards the end of Trump’s presidency and during the 2020 election.</p></li>
+<li><p>“Joe Biden” wasn’t used until about 2019 and then was used extremely heavily during the end of 2020 and 2021, which was when Biden was running for office against Trump.</p></li>
+</ul>
+<p>In conclusion, a lot of insight into Trump’s tweeting style can be gained by extracting data from his tweets and plotting the results.</p>
 
 
 

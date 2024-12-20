@@ -1,0 +1,16 @@
+---
+title: "SDS 264 - Data Science 2"
+listing:
+    contents: 
+        - maps.qmd
+        - simulation.qmd
+        - strings_expressions.qmd
+        - shiny_app.qmd
+    type: grid
+    sort: "date desc"
+    sort-ui: true
+image: projects/sds_264/data_science.jpg
+description: "This folder contains projects from SDS 264 (previously MSCS) Data Science 2."
+page-layout: full
+---
+

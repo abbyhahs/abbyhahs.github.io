@@ -1,12 +1,17 @@
 [
   {
+    "listing": "/sds_264.html",
+    "items": [
+      "/projects/sds_264/maps.html",
+      "/projects/sds_264/simulation.html",
+      "/projects/sds_264/strings_expressions.html",
+      "/projects/sds_264/shiny_app.html"
+    ]
+  },
+  {
     "listing": "/projects.html",
     "items": [
-      "/Wisconsin_districts.html",
-      "/US_states.html",
-      "/strings_expressions.html",
-      "/simulation.html",
-      "/shiny_app.html"
+      "/sds_264.html"
     ]
   }
 ]
