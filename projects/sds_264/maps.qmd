@@ -5,9 +5,9 @@ format:
   html: default
 editor_options: 
   chunk_output_type: console
-image: projects/sds_264/data_science.jpg
+image: world_map.jpg
 description: "Creating descriptive maps"
-page-layout: full
+freeze: true
 ---
 
 ## Map of U.S. States Depicting Influenza Vaccines in 2020-21

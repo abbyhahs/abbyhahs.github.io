@@ -1,0 +1,16 @@
+---
+title: "SDS 316 - Advanced Statistical Modeling"
+listing:
+    contents: 
+        - maps.qmd
+        - simulation.qmd
+        - strings_expressions.qmd
+        - shiny_app.qmd
+    type: grid
+    sort: "date desc"
+    sort-ui: true
+image: projects/sds_264/statistics.avif
+description: "This folder contains my final project from Stats 316."
+page-layout: full
+---
+

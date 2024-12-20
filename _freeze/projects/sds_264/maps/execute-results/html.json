@@ -1,0 +1,17 @@
+{
+  "hash": "3281a2ff8ce9381ebf40ef116e5226ca",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Maps\"\nsidebar: false\nformat:\n  html: default\neditor_options: \n  chunk_output_type: console\nimage: projects/sds_264/world_map.jpg\ndescription: \"Creating descriptive maps\"\nfreeze: true\n---\n\n\n\n## Map of U.S. States Depicting Influenza Vaccines in 2020-21\n\n\n\n\n\n::: {.cell}\n\n:::\n\n::: {.cell}\n::: {.cell-output-display}\n![](maps_files/figure-html/unnamed-chunk-3-1.png){width=672}\n:::\n:::\n\n\n\nThis plot depicts the estimated percentage of all kinds of healthcare workers who received the Influenza vaccine in 2020-21. The percentage was estimated based on a sample taken throughout each state. We learn that Oregon, Nevada, and Florida have the lowest influenza vaccination rate at about 70-75%. The states with the highest vaccination rates are Colorado, South Dakota, and Massachusetts with above a 95% vaccination rate. There doesn't appear to be any clear geographical trends in Influenza vaccinations.\n\n## Map of Republican Votes in Wisconsin Districts \n\n\n\n\n\n\n\n\n\n\n\n::: {.cell}\n::: {.cell-output-display}\n![](maps_files/figure-html/unnamed-chunk-8-1.png){width=672}\n:::\n:::\n\n\n\nBy looking at this plot of Wisconsin's Congressional Districts and the proportion of Republican votes in each district, we can conclude that there is evidence of gerrymandering. Districts 2, 3, and 4 have a clear Democratic majority, but none of the districts that Republican's won have above a 75% Republican majority. Due to the low proportion of Republican votes, it seems that the congressional districts have been engineered so that Republican's just barely have the majority in all districts except for 2, 3, and 4.\n\n",
+    "supporting": [
+      "maps_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}
