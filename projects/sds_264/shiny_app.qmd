@@ -1,5 +1,6 @@
 ---
 title: "Shiny App"
+author: "Abby Hahs and Belle Schmidt"
 sidebar: false
 format:
   html: default

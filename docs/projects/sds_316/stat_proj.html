@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="Analysis of the language used in Trump’s Tweets">
+<meta name="description" content="Evaluating Factors Influencing Periodontal Health and Treatment Outcomes During Pregnancy">
 
 <title>Statistics Final Project – Abby Hahs</title>
 <style>
@@ -164,7 +164,7 @@ window.Quarto = {
 
 <div>
   <div class="description">
-    Analysis of the language used in Trump’s Tweets
+    Evaluating Factors Influencing Periodontal Health and Treatment Outcomes During Pregnancy
   </div>
 </div>
 
@@ -476,6 +476,131 @@ window.Quarto = {
 </section>
 <section id="appendix---multilevel-model-results" class="level2">
 <h2 class="anchored" data-anchor-id="appendix---multilevel-model-results">Appendix - Multilevel Model Results</h2>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Fixed Effects of the Multilevel Model</caption>
+<colgroup>
+<col style="width: 45%">
+<col style="width: 12%">
+<col style="width: 28%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">term</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: left;">confidence_interval</th>
+<th style="text-align: right;">statistic</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">0.954</td>
+<td style="text-align: left;">[0.88, 1.028]</td>
+<td style="text-align: right;">25.206</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">I(age - mean(age))</td>
+<td style="text-align: right;">0.006</td>
+<td style="text-align: left;">[0.003, 0.01]</td>
+<td style="text-align: right;">3.240</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">raceMultiple</td>
+<td style="text-align: right;">-0.273</td>
+<td style="text-align: left;">[-0.366, -0.18]</td>
+<td style="text-align: right;">-5.734</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">raceNative American</td>
+<td style="text-align: right;">-0.214</td>
+<td style="text-align: left;">[-0.268, -0.16]</td>
+<td style="text-align: right;">-7.786</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">raceWhite</td>
+<td style="text-align: right;">-0.106</td>
+<td style="text-align: left;">[-0.161, -0.05]</td>
+<td style="text-align: right;">-3.746</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">use_tobYes</td>
+<td style="text-align: right;">-0.211</td>
+<td style="text-align: left;">[-0.284, -0.139]</td>
+<td style="text-align: right;">-5.708</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">n_qualifying_teeth</td>
+<td style="text-align: right;">0.007</td>
+<td style="text-align: left;">[0.004, 0.011]</td>
+<td style="text-align: right;">3.995</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">bl_pl_i</td>
+<td style="text-align: right;">0.391</td>
+<td style="text-align: left;">[0.343, 0.438]</td>
+<td style="text-align: right;">16.127</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">visit_numVisit 3</td>
+<td style="text-align: right;">-0.001</td>
+<td style="text-align: left;">[-0.029, 0.027]</td>
+<td style="text-align: right;">-0.055</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">visit_numVisit 5</td>
+<td style="text-align: right;">-0.003</td>
+<td style="text-align: left;">[-0.031, 0.024]</td>
+<td style="text-align: right;">-0.224</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">groupTreatment</td>
+<td style="text-align: right;">0.005</td>
+<td style="text-align: left;">[-0.043, 0.054]</td>
+<td style="text-align: right;">0.221</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">visit_numVisit 3:groupTreatment</td>
+<td style="text-align: right;">-0.247</td>
+<td style="text-align: left;">[-0.287, -0.207]</td>
+<td style="text-align: right;">-12.143</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">visit_numVisit 5:groupTreatment</td>
+<td style="text-align: right;">-0.267</td>
+<td style="text-align: left;">[-0.306, -0.228]</td>
+<td style="text-align: right;">-13.421</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Random Effects of the Multilevel Model</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">group</th>
+<th style="text-align: left;">term</th>
+<th style="text-align: right;">estimate</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">pid</td>
+<td style="text-align: left;">sd__(Intercept)</td>
+<td style="text-align: right;">0.257</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Residual</td>
+<td style="text-align: left;">sd__Observation</td>
+<td style="text-align: right;">0.178</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </section>
 <section id="references" class="level2">
 <h2 class="anchored" data-anchor-id="references">References</h2>

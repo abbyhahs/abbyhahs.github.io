@@ -1,11 +1,12 @@
 ---
 title: "Statistics Final Project"
+author: "Abby Hahs and Aneeq Mir"
 sidebar: false
 format:
   html: default
 editor_options: 
   chunk_output_type: console
-image: trump.jpg
+image: teeth.webp
 description: "Evaluating Factors Influencing Periodontal Health and Treatment Outcomes During Pregnancy"
 freeze: true
 ---
@@ -25,7 +26,6 @@ library(lme4)
 library(ggResidpanel)
 library(viridis)
 library(kableExtra)
-library(Matrix)
 ```
 
 ```{r, include = FALSE}
@@ -231,25 +231,25 @@ model <- lmer(gingival_index ~ I(age - mean(age)) + race + use_tob + n_qualifyin
                       data=teeth_clean,
                       REML=TRUE)
 
-# fixed_effects <- tidy(model, effects = "fixed", conf.int = TRUE)
-# 
-# fixed_effects <- fixed_effects |>
-#   mutate(confidence_interval = paste0("[", round(conf.low, 3), ", ", round(conf.high, 3), "]")) |>
-#   select(term, estimate, confidence_interval, statistic)
-# 
-# 
-# kable(fixed_effects,
-#       digits = 3,
-#       caption = "Fixed Effects of the Multilevel Model")
-# 
-# random_effects <- tidy(model, effects = "ran_pars")
-# 
-# random_effects <- random_effects |>
-#   select(group, term, estimate)
-# 
-# kable(random_effects,
-#       digits = 3,
-#       caption = "Random Effects of the Multilevel Model")
+fixed_effects <- tidy(model, effects = "fixed", conf.int = TRUE)
+
+fixed_effects <- fixed_effects |>
+  mutate(confidence_interval = paste0("[", round(conf.low, 3), ", ", round(conf.high, 3), "]")) |>
+  select(term, estimate, confidence_interval, statistic)
+
+
+kable(fixed_effects,
+      digits = 3,
+      caption = "Fixed Effects of the Multilevel Model")
+
+random_effects <- tidy(model, effects = "ran_pars")
+
+random_effects <- random_effects |>
+  select(group, term, estimate)
+
+kable(random_effects,
+      digits = 3,
+      caption = "Random Effects of the Multilevel Model")
 ```
 
 ## References
