@@ -1,0 +1,580 @@
+---
+title: "Algorithms Final Project"
+author: "Abby Hahs, Z Zhen, and Nick Starcevich"
+sidebar: false
+format:
+  html: default
+editor_options: 
+  chunk_output_type: console
+image: snf.webp
+description: "Predicting the Gross Revenue of Skilled Nursing Facilities"
+freeze: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(readr)
+library(tidyverse)
+library(sf)
+library(gridExtra) 
+library(kableExtra)
+library(tidymodels)
+library(vip)
+tidymodels_prefer()
+library(rpart)
+library(rpart.plot)
+library(mosaic)
+library(cowplot)
+library(gridExtra)
+conflicted::conflicts_prefer(base::max)
+```
+
+```{r, include = FALSE, warning = FALSE}
+SNF_Cost_Report_2022 <- read_csv("C:/Users/abbyh/Downloads/MSCS 264/abbyhahs.github.io/projects/sds_341/SNF_Cost_Report_2022.csv")
+```
+
+```{r, echo = FALSE, warning = FALSE}
+snf_clean <- SNF_Cost_Report_2022 |>
+  rename_with(tolower) |>
+  rename_with(~ str_replace_all(., " ", "_")) |>
+  select(state_code, 
+         rural_versus_urban, 
+         type_of_control, 
+         snf_average_length_of_stay_total, 
+         snf_days_total, 
+         snf_number_of_beds, 
+         snf_bed_days_available, 
+         snf_discharges_total, 
+         total_charges, 
+         total_costs, 
+         `total_salaries_(adjusted)`, 
+         total_assets, 
+         accounts_payable, 
+         total_liabilities, 
+         total_fund_balances, 
+         gross_revenue,
+         total_income) |>
+  filter(!is.na(rural_versus_urban), 
+         !is.na(gross_revenue),
+         gross_revenue > 0,
+         gross_revenue < 1000000000) |>
+  mutate(type_of_ownership = ifelse(type_of_control %in% c(1, 2), "nonprofit",
+                                     ifelse(type_of_control %in% c(3, 4, 5, 6), "proprietary", "government"))) |>
+  select(-type_of_control) |>
+  rename(total_salaries_adjusted = `total_salaries_(adjusted)`,
+         snf_avg_stay_length = snf_average_length_of_stay_total)
+```
+
+## Introduction
+
+Skilled Nursing Facilities (SNF) are nursing facilities that are typically used for short term visits where patients require a higher level of care than they can receive in a regular nursing facility. Patients in a SNF usually require medically intensive care and rehabilitation services following a hospital stay, surgery, or acute medical event.
+
+Our data is from the cost report of all SNFs in the US in 2022. As these are Medicare-certified institutional providers, they are required to submit annual cost reports. Thus, we can be quite confident that the data is accurate. Our response variable is gross revenue which is the total patient revenue of the SNF in 2022. The explanatory variables fit into 2 categories, either SNF characteristics or SNF financials. Characteristics include location, type of ownership, and other variables such as average length of stay, number of available beds, and discharges. Financials include variables like total costs, salaries, liabilities, and income. **We aim to use these explanatory variables to predict the gross revenue of SNF's in 2022.** 
+
+To clean the dataset, we selected variables that we thought would be most useful for predicting the gross revenue of the nursing facility based on the *[data dictionary](https://data.cms.gov/sites/default/files/2023-12/Skilled%20Nursing%20Facility%20Cost%20Report%20Data%20Dictionary_508.pdf)*. Originally, we included both skilled nursing facilities and regular nursing facilities, but we found that most facilities in the data were skilled facilities (n=14725), so we chose to remove the columns related to regular nursing facilities. We chose to remove the missing values from the rural vs urban column, since if that column had a missing value, then every other observation for that nursing home was also missing. We also removed the missing values from gross revenue since that is the response we are trying to predict. For the financial information, we kept columns that had fewer than 500 missing values and used the columns that were totals (total assets, total costs, etc) since these will give a more accurate understanding of the facilities financials. Our clean dataset has dimensions 14725 x 17.
+
+## Variables 
+
+Table: Variable Descriptions
+
+| Variable                          | Variable Role   | Type                    | Explanation                                          |
+|-----------------------------------|:----------------|:----------------------- |:-----------------------------------------------------|
+| state_code                        | Explanatory     | Categorical (52 levels) | The state of the SNF                                 |
+| rural_versus_urban                | Explanatory     | Categorical (2 levels)  | If the SNF is in a rural or urban location           |
+| type_of_ownership                 | Explanatory     | Categorical (3 levels)  | Type of ownership: nonprofit, proprietary, government|
+| snf_avg_stay_length               | Explanatory     | Numeric                 | The total average length of stay                     |
+| snf_days_total                    | Explanatory     | Numeric                 | The total number of inpatient days or visits         |
+| snf_bed_days_available            | Explanatory     | Numeric                 | Total bed days available, (num beds x num days)      |
+| snf_discharges_total              | Explanatory     | Numeric                 | Total number of discharges, including deaths         |
+| total_charges                     | Explanatory     | Numeric                 | Total gross patient charges, includes charity care   |
+| total_salaries_(adjusted)         | Explanatory     | Numeric                 | Wages and salaries of all employees, including PTO   |
+| total_assets                      | Explanatory     | Numeric                 | Sum of all assets, equipment, investments, etc       |
+| accounts_payable                  | Explanatory     | Numeric                 | Amount due to trade creditors and for other supplies |
+| total_liabilities                 | Explanatory     | Numeric                 | Sum of all liabilities                               |
+| total_fund_balances               | Explanatory     | Numeric                 | Total fund balances adjusted for restricted funds    |
+| gross_revenue                     | Response        | Numeric                 | Total revenue from patients                          |
+| total_income                      | Explanatory     | Numeric                 | Total income of the SNF                              |
+| total_costs                       | Explanatory     | Numeric                 | Total costs of the SNF                               |
+| snf_number_of_beds                | Explanatory     | Numeric                 | Number of beds available for patient use             |
+
+
+## EDA
+
+```{r, echo = FALSE}
+# Summary stats for variables in snf_clean
+fav_stats(snf_clean$gross_revenue) |>
+  kable(caption = "Summmary Statistics for Gross Revenue")
+```
+
+Analyzing our summary statistics for gross revenue which is measured in dollars. We can see that the minimum gross revenue for a skilled nursing facility is \$38,757, where our max is \$149,570,724, the IQR is \$5,951,397 to \$14,896,433, with the median being \$9,728,984. These ranges could potentially be an issue for us.
+
+```{r, warning=FALSE, echo = FALSE, out.width="60%", fig.pos='H', fig.cap = "Top: Histogram for the gross revenue of skilled nursing facilities. Bottom: Histogram for the logged gross revenue of skilled nursing facilities."}
+histo1 <- snf_clean |>
+  ggplot(aes(x = gross_revenue)) +
+  geom_histogram(bins = 15) +
+  labs(
+    x = "Gross Revenue",
+    y = "Count"
+  ) +
+  theme_bw()
+
+histo2 <- snf_clean |>
+  ggplot(aes(x = log(gross_revenue))) +
+  geom_histogram(bins = 30) +
+  labs(
+    x = "Logged Gross Revenue",
+    y = "Count"
+  ) +
+  theme_bw()
+
+plot_row <- plot_grid(histo1, histo2)
+
+title <- ggdraw() + 
+  draw_label(
+    "Count of Gross Revenue for SNFs",
+    x = 0,
+    hjust = 0
+  ) +
+  theme(
+    # add margin on the left of the drawing canvas,
+    # so title is aligned with left edge of first plot
+    plot.margin = margin(0, 0, 0, 7)
+  )
+
+plot_grid(
+  title, plot_row,
+  ncol = 1,
+  # rel_heights values control vertical title margins
+  rel_heights = c(0.1, 1)
+)
+
+```
+
+Looking at the Figure 1 on the left, we can see that the range of the variable is affecting us being able to see the distribution, so we logged gross_revenue to see the distributions of revenues, on the right, we can see the logged revenues are normally distributed.
+
+```{r, echo= FALSE, warning = FALSE, message = FALSE, out.width="75%", fig.pos='H', fig.cap = "Scatterplot showing the relationship between skilled nursing days total and gross revenue."}
+# relationship between snf days total vs gross revenue 
+snf_clean |>
+  ggplot(aes(x = snf_days_total, y = gross_revenue)) +
+  geom_point() +
+  geom_smooth(se = FALSE, method = 'gam') +
+  labs(x = "SNF Days Total",
+       y = "Gross Revenue",
+       title = "Gross Revenue by SNF Days") +
+  theme_bw()
+```
+
+There are lots of values on our scatterplot (Figure 2) so it's hard to tell if there is a positive or negative relationship between gross revenue and snf_total_days which is the total amount of days stayed in the SNF for that fiscal year which is 2022. Looking at our line of best fit we can see that as snf_days_total increases the gross revenue also increases there is a somewhat positive linear relationship shown here.
+
+```{r, echo = FALSE, out.width="60%", fig.pos='H', fig.cap = "Boxplot showing the relationship between location and gross revenue."}
+# gross revenue of snf cannot be easily distinguishable by whether the nursing home is in a rural or urban area
+snf_clean |>
+  ggplot(aes(x = rural_versus_urban, y = gross_revenue, fill = rural_versus_urban)) +
+  geom_boxplot(show.legend = FALSE) +
+  theme_bw() +
+  labs(
+    title = "Gross Revenue by Location",
+    x = "Rural vs. Urban",
+    y = "Gross Revenue"
+  )
+```
+
+Gross revenue of skilled nursing facilities cannot be easily distinguishable by whether the nursing home is in a rural or urban area, we can see that we have a LOT of outliers in Figure 3. We can see that there is overlap in our boxplots and that the medians are near each other. 
+
+```{r, echo = FALSE, out.width="65%", warning = FALSE, fig.pos='H', fig.cap = "Map showign the total gross revenue of all skilled nursing facilites, excluding Alaska, Hawaii, District of Columbia and Puerto Rico."}
+# just messing around with this
+states <- read_sf("https://rstudio.github.io/leaflet/json/us-states.geojson")
+
+stcodes <- read_csv("C:/Users/abbyh/Downloads/MSCS 264/abbyhahs.github.io/projects/sds_341/stcodes.csv", show_col_types = FALSE)
+
+snf_clean |>
+  group_by(state_code) |>
+  summarize(total_gross = base::sum(gross_revenue)) |>
+  left_join(stcodes, join_by(state_code == Postal)) |>
+  left_join(states, join_by(State == name)) |>
+  filter(!(State %in% c("Alaska", 
+                       "Hawaii", 
+                       "District of Columbia", 
+                       "Puerto Rico"))) |>
+  st_as_sf() |>
+  ggplot() +
+  geom_sf(aes(fill = total_gross)) + 
+  theme_bw() +
+  labs(
+    title = "Total Gross Revenue by State",
+    fill = "Gross Revenue"
+  )
+```
+
+Visualizing our states in another way we can see the total gross revenue for each state. We can see that California, New York, Pennsylvania, Texas, and Florida have very large gross revenues. If a skilled nursing facility is in a certain state, it could contribute to the gross revenue. 
+
+## Lasso Model Building
+
+To predict the gross revenue for the SNFs, we first used a LASSO regression model.
+
+For our regularization model, we chose to do a LASSO regression model since our dataset has 16 explanatory variables. We chose this model type because we hoped that some of our variables would be reduced to a coefficient of zero. To create this model, we first split the data using an 80-20 split and created 10 folds for cross validation for resampling to use to select our best model based off of the RMSE. Then we created the model specification and chose to optimize the penalty. To create the recipe we used all predictors and created indicator variables for all of our categorical variables. We chose to impute the median value for all of columns containing NA values, thus eliminating influence from large outliers. We also removed all variables that have zero variance and normalized all variables. Then, we created the workflow for the model. To optimize the penalty, we created a penalty grid with 10 levels and used tune grid on the folds to find the highest r-squared value. We also plotted the results to visualize them. Then we chose to select by the one standard error method to ensure that we have the penalty that will create the simplest model. The optimal penalty is 0.0000000001. Using the optimal penalty, we finalized the workflow and fit the model. Then, we created 50 bootstraps of the training data and found the average R-Squared and RMSE.
+
+```{r, warning = FALSE, message=FALSE}
+# set seed and split data
+set.seed(12345)
+
+snf_split <- initial_split(snf_clean, prop = 0.8)
+snf_train_tbl <- training(snf_split)
+snf_test_tbl <- testing(snf_split)
+
+# Create 10 cross-validation folds
+snf_fold_10 <- vfold_cv(snf_train_tbl, v = 10)
+
+# create the model specification, recipe, and workflow
+snf_lasso_spec <- 
+  linear_reg(mixture = 1, penalty= tune()) |>   # penalty is tuneable
+  set_mode("regression") |> 
+  set_engine("glmnet")
+
+snf_lasso_recipe <- 
+  recipe(formula = gross_revenue ~ ., data = snf_train_tbl) |> 
+  step_dummy(all_nominal_predictors()) |> 
+  step_impute_median(snf_avg_stay_length, 
+         snf_days_total, 
+         snf_number_of_beds, 
+         snf_bed_days_available, 
+         snf_discharges_total, 
+         total_charges, 
+         total_costs, 
+         total_assets, 
+         accounts_payable, 
+         total_liabilities, 
+         total_fund_balances, 
+         total_income) |>
+  step_zv(all_predictors()) |> 
+  step_normalize(all_predictors())
+
+snf_lasso_wf <- workflow() |> 
+  add_recipe(snf_lasso_recipe) |> 
+  add_model(snf_lasso_spec)
+
+# create the grid used to find the best penalty
+penalty_grid <-
+  grid_regular(penalty(), levels = 10)
+
+snf_tune_res <- tune_grid(
+  snf_lasso_wf,
+  resamples = snf_fold_10, 
+  grid = penalty_grid
+)
+
+# use select by one std error to find the best and simplest model
+best_penalty <- select_by_one_std_err(snf_tune_res, metric = "rsq", penalty)
+
+# redo the workflow and fit the model with the best penalty
+snf_lasso_final_wf <- finalize_workflow(snf_lasso_wf, best_penalty)
+snf_lasso_final_fit <- fit(snf_lasso_final_wf, snf_train_tbl)
+```
+
+```{r, echo = FALSE, out.width="75%", include = FALSE}
+# find the rsq and rmse of the model on the bootstraps from the training data
+# snf_boot_50 <- bootstraps(snf_train_tbl, times = 50)
+# 
+# lasso_res <- fit_resamples(snf_lasso_final_wf, snf_boot_50)
+# 
+# options(scipen = 999, digits = 3)
+# collect_metrics(lasso_res) |>
+#   select(.metric, .estimator, mean, n, std_err) |>
+#   kable(caption = "Lasso Metrics")
+```
+
+## Lasso Model Refinement
+
+After thoroughly observing the variable descriptions, we've determined that the variables are so different that its not worth removing any of them. When we tried doing this, the model trivially got worse. Also, since the variables are all unique, there aren't any good options of new variables to make using combinations of the variables we already have. Thus, for our model refinement, what we did was we decided to focus on correlation between variables just to verify that none need to be removed.
+
+To determine how to refine the model, we found the correlation between some of the numeric predictors that we thought might have higher correlation.
+
+```{r, echo=FALSE}
+snf_clean |>
+  select(total_salaries_adjusted, snf_days_total, total_charges, snf_discharges_total, total_costs) |>
+  drop_na() |>
+  stats::cor() |>
+  kable(caption = "Correlation Matrix for Numeric Predictors")
+```
+
+It is evident that the numeric variables are not significantly highly correlated and this is shown in the correlation matrix above. The highest correlation is between total costs and total charges with a coefficient of 0.765 which isn't too strong. We decided that there are not any necessary adjustments to make to the LASSO model. 
+
+## Tree Model Building
+
+Next, we decided to use a CART decision tree.
+
+```{r, echo=FALSE,warning=FALSE, message = FALSE}
+# set.seed(12345)
+# 
+# snf_split <- initial_split(snf_clean, prop = 0.8)
+# snf_train_tbl <- training(snf_split)
+# snf_test_tbl <- testing(snf_split)
+# 
+# snf_folds <- vfold_cv(snf_train_tbl, v = 10)
+# snf_grid <- grid_regular(cost_complexity(), levels = 10)
+# 
+# snf_model <-
+#  decision_tree(cost_complexity= tune()) |>
+#  set_mode("regression") |>
+#  set_engine("rpart")
+# 
+# snf_wflow <- workflow() |>
+#     add_recipe(snf_lasso_recipe) |>
+#     add_model(snf_model)
+# 
+# snf_res <-
+#   tune_grid(
+#     snf_wflow,
+#     resamples = snf_folds,
+#     grid = snf_grid)
+
+# autoplot(snf_res)
+#
+# show_best(snf_res, metric = "rmse")
+# best_complexity <- select_by_one_std_err(snf_res, metric = "rmse", cost_complexity)
+# snf_final_wf <- finalize_workflow(snf_wflow,best_complexity)
+# snf_final_fit <- fit(snf_final_wf,  snf_train_tbl)
+#
+# # augment(snf_final_fit, snf_test_tbl) |>
+# #   metrics(gross_revenue,.pred)
+# 
+# # CAN'T PLOT BECAUSE TOO COMPLICATED
+# 
+
+```
+
+```{r, echo = FALSE, out.width="75%", include = FALSE}
+# # find the rsq and rmse of the model on the bootstraps from training data
+# snf_boot_50 <- bootstraps(snf_train_tbl, times = 50)
+# 
+# tree_res <- fit_resamples(snf_final_wf, snf_boot_50)
+# 
+# options(scipen = 999, digits = 3)
+# collect_metrics(tree_res) |>
+#   select(.metric, .estimator, mean, n, std_err) |>
+#   kable(caption = "CART Metrics")
+```
+
+We developed a decision tree regression model to predict gross revenue using the CART method since the there were complications in creating a decision tree using the Random Forest method with our data. We again used a 80-20 split for a testing and training datasets, and created 10 folds for cross-validation. We used the same recipe where we used all predictors and created indicator variables for all of our categorical variables. We also imputed the median value for all of columns containing NA values and removed all variables that have zero variance and normalized all variables. The model, specified with the rpart engine, included a tunable cost_complexity parameter. Then, we created the workflow for the model using the model and the recipe. A grid of 10 complexity levels was created. To optimize our RMSE by using our workflow, 10 folds we created and the grid of complexity levels, we were able to cross-validate the optimal value. The one standard error method was used to select the final complexity value of 0.0000000001. The final model was trained with the best complexity value and evaluated on the bootstraps from the training data, with RMSE and R-Squared computed to assess its predictive accuracy.
+
+## Tree Model Refinement
+
+In the original model, even though we used the one standard deviation technique to find the most simple model in our grid, it didn't make the resulting tree any more simple. This was because our original grid only contained massively complicated trees. Thus, we chose to refine our model by changing the cost complexity grid in order for the model to actually be visible in our plot (and so that we could see the important variables in the model). It makes sense why we had to do this since the cost complexity can't allow the tree to get too crazy since we have so many variables which makes it easy to have a ridiculously deep tree with tons of interactions.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+# snf_grid <- grid_regular(cost_complexity(c(-2.5, 1)), levels = 10)
+# 
+# snf_res <-
+#   tune_grid(
+#     snf_wflow,
+#     resamples = snf_folds,
+#     grid = snf_grid)
+# 
+# #autoplot(snf_res)
+# 
+# #show_best(snf_res, metric = "rmse")
+# 
+# best_complexity <- select_by_one_std_err(snf_res, metric = "rmse", cost_complexity)
+# snf_final_wf <- finalize_workflow(snf_wflow,best_complexity)
+# snf_final_fit <- fit(snf_final_wf,  snf_train_tbl)
+
+```
+
+```{r, echo = FALSE, out.width="75%", include = FALSE}
+# # find the rsq and rmse of the model on the resamples from training data
+# snf_boot_50 <- bootstraps(snf_train_tbl, times = 50)
+# 
+# tree_res_refined <- fit_resamples(snf_final_wf, snf_boot_50)
+# 
+# options(scipen = 999, digits = 3)
+# collect_metrics(tree_res_refined) |>
+#   select(.metric, .estimator, mean, n, std_err) |>
+#   kable(caption = "CART Refined Metrics")
+```
+
+For the refinement, we set the cost complexity to be tuneable between -2.5 and 1. Then, we created 50 bootstraps of the training data and found the average R-Squared and RMSE.
+
+A limitation to this refinement is that our RMSE is a little worse and our R-Squared ends up being better, but then our tree only has 6 levels instead of the ridiculous amount of levels that the original model had. Our RMSE in the new model is \$5,435,712 as opposed to \$5,445,108 in our original model and our $R^2$ is 0.71 as opposed to 0.701 in our original model. Overall the model is a lot more simple, but a bit worse at making predictions of the SNFs gross revenue as a consequence. 
+
+## Random Forest Model Building
+
+Finally, we will build a Random Forest model.
+
+```{r, warning=FALSE, message=FALSE}
+# set seed and split data
+set.seed(12345)
+
+snf_split <- initial_split(snf_clean, prop = 0.8)
+snf_train_tbl <- training(snf_split)
+snf_test_tbl <- testing(snf_split)
+
+# Create 10 cross-validation folds
+snf_fold_10 <- vfold_cv(snf_train_tbl, v = 10)
+
+snf_ranger_spec <- 
+  rand_forest(trees = 100, mtry=tune()) |> 
+  set_mode("regression") |> 
+  set_engine("ranger",importance = "impurity")  
+
+snf_ranger_recipe <- 
+ recipe(formula = gross_revenue ~ ., data = snf_train_tbl) |> 
+  step_dummy(all_nominal_predictors()) |> 
+  step_impute_median(snf_avg_stay_length, 
+         snf_days_total, 
+         snf_number_of_beds, 
+         snf_bed_days_available, 
+         snf_discharges_total, 
+         total_charges, 
+         total_costs, 
+         total_assets, 
+         accounts_payable, 
+         total_liabilities, 
+         total_fund_balances, 
+         total_income) |>
+  step_zv(all_predictors()) |> 
+  step_normalize(all_predictors()) 
+
+snf_ranger_workflow <- 
+  workflow() |> 
+  add_recipe(snf_ranger_recipe) |> 
+  add_model(snf_ranger_spec) 
+
+snf_grid <- grid_regular(mtry(c(1,17)), levels = 10)
+
+snf_res <-
+  tune_grid(
+    snf_ranger_workflow,
+    resamples = snf_fold_10,
+    grid = snf_grid)
+
+#autoplot(snf_res)
+
+#show_best(snf_res, metric = "rmse")
+
+best_mtry <- select_by_one_std_err(snf_res, metric = "rmse", mtry)
+snf_ranger_final_wf <- finalize_workflow(snf_ranger_workflow, best_mtry)
+snf_ranger_final_fit <- fit(snf_ranger_final_wf,  snf_train_tbl)
+
+```
+
+```{r, echo = FALSE, out.width="75%", include = FALSE}
+# find the rsq and rmse of the model on the resamples from training data
+# snf_boot_50 <- bootstraps(snf_train_tbl, times = 50)
+# 
+# ranger_res <- fit_resamples(snf_ranger_final_wf, snf_boot_50)
+# 
+# options(scipen = 999, digits = 3)
+# collect_metrics(ranger_res) |>
+#   select(.metric, .estimator, mean, n, std_err) |>
+#   kable(caption = "Random Forest Metrics")
+```
+
+We developed this forest model to predict gross revenue using the ranger engine since we want all of our variables to be used a decent amount in the trees decision making (splits). We again used a 80-20 split for a testing and training datasets, and created 10 folds for cross-validation. We used the same recipe where we used all predictors and created indicator variables for all of our categorical variables. We also imputed the median value for all of columns containing NA values and removed all variables that have zero variance and normalized all variables. The model, specified with the ranger engine, included a tunable mtry parameter which is the number of randomly selected candidate variables in a decision (split) made in the tree. Then, we created the workflow for the model using the model and the recipe. A grid of 10 mtry levels was created containing the range 1 to 17 since that is how many variables are in our dataset. We optimized the procedure using the RMSE metric. The one standard error method was used to select the final mtry value of 6 which is expected as we expect mtry to be # of vars / 3 which for us is 17/3 which rounds to 6. The final model was trained with the best mtry value and evaluated on the bootstraps from the training data, with RMSE and R^2 computed to assess its predictive accuracy.
+
+## Random Forest Model Refinement
+
+For our model refinement, we attempted to remove snf days total since we had a feeling that it might be somewhat similar to revenue. We were curious to see the results of the model without the variable. The adjustments that had to be made were to remove the variable in the recipe and change the upper bound of the grid to be one less since we now have 16 variables to work with. 
+
+```{r,echo=FALSE, warning=FALSE, message=FALSE}
+# # set seed and split data
+# set.seed(12345)
+# 
+# snf_clean2 <- snf_clean |>
+#   select(-snf_days_total)
+# 
+# snf_split2 <- initial_split(snf_clean2, prop = 0.8)
+# snf_train_tbl2 <- training(snf_split)
+# snf_test_tbl2 <- testing(snf_split)
+# 
+# # Create 10 cross-validation folds
+# snf_fold_102 <- vfold_cv(snf_train_tbl2, v = 10)
+# 
+# 
+# snf_ranger_recipe2 <-
+#  recipe(formula = gross_revenue ~ ., data = snf_train_tbl2) |>
+#   step_dummy(all_nominal_predictors()) |>
+#   step_impute_median(snf_avg_stay_length,
+#          #snf_days_total,
+#          snf_number_of_beds,
+#          snf_bed_days_available,
+#          snf_discharges_total,
+#          total_charges,
+#          total_costs,
+#          total_assets,
+#          accounts_payable,
+#          total_liabilities,
+#          total_fund_balances,
+#          total_income) |>
+#   step_zv(all_predictors()) |>
+#   step_normalize(all_predictors())
+# 
+# snf_ranger_spec2 <-
+#   rand_forest(trees = 100, mtry=tune()) |>
+#   set_mode("regression") |>
+#   set_engine("ranger",importance = "impurity")
+# 
+# snf_ranger_workflow2 <-
+#   workflow() |>
+#   add_recipe(snf_ranger_recipe2) |>
+#   add_model(snf_ranger_spec2)
+# 
+# snf_grid <- grid_regular(mtry(c(1,16)), levels = 10)
+# 
+# snf_res <-
+#   tune_grid(
+#     snf_ranger_workflow2,
+#     resamples = snf_fold_102,
+#     grid = snf_grid)
+# 
+# #autoplot(snf_res)
+# 
+# #show_best(snf_res, metric = "rmse")
+# 
+# best_mtry <- select_by_one_std_err(snf_res, metric = "rmse", mtry)
+# snf_ranger_final_wf2 <- finalize_workflow(snf_ranger_workflow2, best_mtry)
+# snf_ranger_final_fit2 <- fit(snf_ranger_final_wf2,  snf_train_tbl2)
+```
+
+```{r, echo = FALSE, out.width="75%", include = FALSE}
+# # find the rsq and rmse of the model on the resamples from training data
+# snf_boot_50 <- bootstraps(snf_train_tbl2, times = 50)
+# 
+# ranger_res2 <- fit_resamples(snf_ranger_final_wf2, snf_boot_50)
+# 
+# options(scipen = 999, digits = 3)
+# collect_metrics(ranger_res2) |>
+#   select(.metric, .estimator, mean, n, std_err) |>
+#   kable(caption = "Random Forest Revised Metrics")
+```
+
+The $R^2$ and RMSE again calculated with the best mtry and evaluated on the boostraps from the training dataset. The $R^2$ shows that this model is a tad worse as only 0.802 compared to 0.809 in the unrefined model. The RMSE is also worse as it is \$4,554,068 compared to \$4,455,595 in the unrefined model. Thus, our original forest model is slightly better.
+
+## Conclusion
+
+Table: Model Results
+
+| Model                     | RMSE      | $R^2$ | 
+|---------------------------|:----------|:------|
+| Lasso                     | 5,237,130 | 0.726 |
+| Regression Tree           | 5,445,108 | 0.710 |
+| Regression Tree (refined) | 5,435,712 | 0.701 |
+| Random Forest             | 4,455,595 | 0.809 | 
+| Random Forest (refined)   | 4,554,068 | 0.802 |
+
+We used a Lasso model, Regression Tree, and Random Forests to predict the gross income of SNF's around the U.S. Our two best models based off the R-Squared and RMSE based off of the bootstrap samples were the two Ranger Models. Thus, we choose the unrefined Random Forest model as our final model to augment with the testing dataset.
+
+```{r, echo = FALSE, out.width="75%"}
+options(scipen = 999, digits = 3)
+augment(snf_ranger_final_fit, snf_test_tbl) |>
+ metrics(gross_revenue, .pred) |>
+  kable(caption = "Random Forest Final Metrics")
+```
+
+```{r, echo = FALSE, out.width="75%", fig.cap = "Top 10 most important variables for the Random Forest method.", fig.pos='H'}
+# find the most important predictors
+vip(snf_ranger_final_fit) +
+  theme_bw() +
+  labs(title = "Top 10 Most Important Variables")
+```
+
+We can see that the Random Forest explains 81.5% of the variability in gross revenue and the RSQ is \$4,392,594. Looking at the vip most important variables, the top 5 are adjusted total salaries, total costs, total snf days, snf bed days available, and total charges. Thus, we conclude these variables are influential in determining gross revenue and that Random Forest is best at predicting the gross revenue, likely because the many explanatory variables were able to be more accurately assessed by using multiple decision trees.

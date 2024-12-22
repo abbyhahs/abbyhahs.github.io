@@ -1,0 +1,13 @@
+---
+title: "SDS 341 - Algorithms for Decision Making"
+listing:
+    contents: 
+        - alg_proj.qmd
+    type: grid
+    sort: "date desc"
+    sort-ui: true
+image: projects/sds_341/code.webp
+description: "This folder contains my final project from Algorithms for Decision Making."
+page-layout: full
+---
+

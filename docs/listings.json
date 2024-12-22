@@ -1,15 +1,8 @@
 [
   {
-    "listing": "/sds_316.html",
+    "listing": "/sds_341.html",
     "items": [
-      "/projects/sds_316/stat_proj.html"
-    ]
-  },
-  {
-    "listing": "/projects.html",
-    "items": [
-      "/sds_316.html",
-      "/sds_264.html"
+      "/projects/sds_341/alg_proj.html"
     ]
   },
   {
@@ -19,6 +12,26 @@
       "/projects/sds_264/simulation.html",
       "/projects/sds_264/strings_expressions.html",
       "/projects/sds_264/shiny_app.html"
+    ]
+  },
+  {
+    "listing": "/projects.html",
+    "items": [
+      "/sds_341.html",
+      "/sds_316.html",
+      "/sds_264.html"
+    ]
+  },
+  {
+    "listing": "/research1.html",
+    "items": [
+      "/research/madison.html"
+    ]
+  },
+  {
+    "listing": "/sds_316.html",
+    "items": [
+      "/projects/sds_316/stat_proj.html"
     ]
   }
 ]

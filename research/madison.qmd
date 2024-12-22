@@ -1,0 +1,24 @@
+---
+title: "2024 Summer Research at UW-Madison"
+sidebar: false
+format:
+  html: default
+editor_options: 
+  chunk_output_type: console
+image: uw_mad.png
+description: "Association Between the Occurence of Stigmatizing Language within Clinical Notes and Outcomes Among Patients with Sepsis"
+freeze: true
+---
+
+In the summer of 2024, I had the opportunity to participate in the Summer Research Opportunity Program at the University of Wisconsin-Madison. In this program, I worked closely with Dr.Anoop Mayampurath in the ICU Data Science Lab.
+
+My research consisted of analyzing the association between stigmatizing language (words like "alcoholic", "abuse", "dirty", etc) and patient outcomes using MIMIC-III data. I conducted significance testing and created multivariable logistic regression models using Rstudio. Then, I analyzed and communicated the results which I displayed through a poster presentation.
+
+```{r}
+library(magick)
+img <- image_read("AbbyHahs_Stigmatizing.tiff")
+image_write(img, "AbbyHahs_Stigmatizing.jpg")
+knitr::include_graphics("AbbyHahs_Stigmatizing.jpg")
+```
+
+My research is being presented at the Society for Critical Care Medicine Conference in 2025.

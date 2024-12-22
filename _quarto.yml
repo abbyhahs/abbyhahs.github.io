@@ -13,6 +13,8 @@ website:
         text: "Home"
       - href: projects.qmd
         text: "St. Olaf Course Projects"
+      - href: research1.qmd
+        text: "Research"
         
   page-footer:
     left: |

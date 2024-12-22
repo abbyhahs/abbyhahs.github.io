@@ -1,0 +1,12 @@
+---
+title: "Research"
+listing:
+    contents:
+        - madison.qmd
+    type: grid
+    sort: "title desc"
+    sort-ui: true
+title-block-banner: true
+page-layout: full
+---
+

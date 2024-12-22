@@ -1,0 +1,15 @@
+{
+  "hash": "63a19ba776ee0bf46214b34aa881d308",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"2024 Summer Research at UW-Madison\"\nsidebar: false\nformat:\n  html: default\neditor_options: \n  chunk_output_type: console\nimage: uw_mad.png\ndescription: \"Association Between the Occurence of Stigmatizing Language within Clinical Notes and Outcomes Among Patients with Sepsis\"\nfreeze: true\n---\n\n\n\nIn the summer of 2024, I had the opportunity to participate in the Summer Research Opportunity Program at the University of Wisconsin-Madison. In this program, I worked closely with Dr.Anoop Mayampurath in the ICU Data Science Lab.\n\nMy research consisted of analyzing the association between stigmatizing language (words like \"alcoholic\", \"abuse\", \"dirty\", etc) and patient outcomes using MIMIC-III data. I conducted significance testing and created multivariable logistic regression models using Rstudio. Then, I analyzed and communicated the results which I displayed through a poster presentation.\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(magick)\n```\n\n::: {.cell-output .cell-output-stderr}\n\n```\nLinking to ImageMagick 6.9.12.98\nEnabled features: cairo, freetype, fftw, ghostscript, heic, lcms, pango, raw, rsvg, webp\nDisabled features: fontconfig, x11\n```\n\n\n:::\n\n```{.r .cell-code}\nimg <- image_read(\"AbbyHahs_Stigmatizing.tiff\")\nimage_write(img, \"AbbyHahs_Stigmatizing.jpg\")\nknitr::include_graphics(\"AbbyHahs_Stigmatizing.jpg\")\n```\n\n::: {.cell-output-display}\n![](AbbyHahs_Stigmatizing.jpg)\n:::\n:::\n\n\n\nMy research is being presented at the Society for Critical Care Medicine Conference in 2025.",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}
