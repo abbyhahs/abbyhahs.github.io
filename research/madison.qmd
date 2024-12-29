@@ -12,13 +12,10 @@ freeze: true
 
 In the summer of 2024, I had the opportunity to participate in the Summer Research Opportunity Program at the University of Wisconsin-Madison. In this program, I worked closely with Dr.Anoop Mayampurath in the ICU Data Science Lab.
 
-My research consisted of analyzing the association between stigmatizing language (words like "alcoholic", "abuse", "dirty", etc) and patient outcomes using MIMIC-III data. I conducted significance testing and created multivariable logistic regression models using Rstudio. Then, I analyzed and communicated the results which I displayed through a poster presentation.
+My research consisted of analyzing the association between stigmatizing language (words like "alcoholic", "abuse", "dirty", etc) and patient outcomes using MIMIC-III data. I conducted significance testing and created multivariable logistic regression models using Rstudio. Then, I analyzed and communicated the results which I displayed through a poster presentation. 
 
-```{r}
-library(magick)
-img <- image_read("AbbyHahs_Stigmatizing.tiff")
-image_write(img, "AbbyHahs_Stigmatizing.jpg")
-knitr::include_graphics("AbbyHahs_Stigmatizing.jpg")
+```{r, echo = FALSE, out.width = "100%"}
+knitr::include_graphics("C:/Users/abbyh/Downloads/MSCS 264/abbyhahs.github.io/stig_Poster.jpg")
 ```
 
 My research is being presented at the Society for Critical Care Medicine Conference in 2025.
